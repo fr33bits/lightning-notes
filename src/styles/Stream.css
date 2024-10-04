@@ -1,0 +1,176 @@
+.stream {
+    margin: 0px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* needed to make sure that the new-message-form-container has the (100%) width of this element and not the entire viewport */
+}
+
+.header-background {
+    display: block;
+    height: 60px;
+    width: 120%;
+    position: absolute;
+    top: 0;
+    left: -10px;
+    z-index: 7;
+    backdrop-filter: blur(25px);
+    -webkit-mask: linear-gradient(black 95%, transparent);
+}
+
+.header {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    width: auto;
+    height: 50px;
+    margin: 0 10px;
+    padding: 0 10px;
+    z-index: 8;
+
+    box-shadow: 0px 0px 12px 10px rgb(234, 234, 234);
+    border-radius: 0 0 15px 15px;
+
+    text-align: center; /* needed to center align the child div */
+}
+
+.header-item {
+    display: inline-block;
+    height: 100%;
+}
+
+.leave-stream-icon {
+    margin: 5px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 40px;
+    vertical-align: middle;
+}
+
+.leave-stream-icon:hover {
+    background-color: rgb(218, 218, 218);
+}
+
+.stream-name {
+    display: inline-block;
+    height: 100%;
+    width: 50%; /* also used to prevent overly long stream names overflowing and taking up too much space (TODO: change on mobile) */
+    line-height: 50px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* MESSAGES */
+
+.messages-container {
+    flex: 1;
+    overflow-y: scroll;
+    padding-bottom: 60px; /* adjustment for floating message form */
+    /* TODO: doesn't seem like there's an easy way to fix the scrollbar being hidden behind the form; could use the perfect-scrollbar library */
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: auto;
+    padding: 20px 20px 0px 20px;
+}
+
+.message-row {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.message {
+    max-width: 400px;
+    width:fit-content;
+}
+
+.own-message {
+    float: right;
+}
+
+.message-user {
+    /* font-weight: bold; */
+    font-size: small;
+}
+
+.message-text {
+    background-color: #2397d1;
+    color: white;
+    margin: 3px 0;
+    padding: 10px;
+    width: fit-content;
+}
+
+.message-timestamp {
+    font-size:x-small
+}
+
+
+.new-message-form-container-background {
+    display: block;
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    z-index: 7;
+
+    &:after {
+        content: '';
+        position: absolute;
+        width: 120%;
+        top: -20px;
+        left: -10px;
+        right: 0;
+        bottom: 0;
+        backdrop-filter: blur(20px);
+        -webkit-mask: linear-gradient(transparent, black 30%);
+    }
+}
+
+.new-message-form-container {
+    display: block;
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: #00000000;
+    z-index: 8;
+}
+
+.new-message-form {
+    display: flex;
+    margin: 10px;
+    width: auto;
+    box-shadow: 0 0 12px 5px rgb(234, 234, 234);
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+
+.new-message-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+}
+
+.send-button {
+    border: none;
+    outline: none;
+    background: #DDA601;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 15px;
+    font-weight: bold;
+    padding: 10px;
+}

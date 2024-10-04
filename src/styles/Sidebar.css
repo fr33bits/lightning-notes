@@ -1,0 +1,198 @@
+.sidebars {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100vh;
+    z-index: 100;
+}
+
+.sidebar {
+    width: 300px;
+    color: rgb(36, 36, 36);
+
+    margin: 10.75px;
+    border-radius: 15px;
+    box-shadow: 0 0 12px 5px rgb(234, 234, 234);
+
+    padding: 10px;
+}
+
+.sidebar-streamlist {
+    flex: 1;
+    margin-bottom: 0;
+    /* ? why does the bottom margin of this element not cover up with the margin of the top element even though stream list items behave like that */
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.sidebar-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-height: 40px;
+    padding: 10px;
+    border-radius: 15px;
+    line-height: 40px;
+    color: white;
+}
+
+.sidebar-header-service-name {
+    flex: 1;
+    font-size: 27px;
+}
+
+.sidebar-header-button {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+.sidebar-header-button:hover {
+    background-color: rgba(255, 255, 255, 0.129);
+}
+
+.sidebar-header-button-icon {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-stream-item {
+    margin: 10px;
+    height: 50px;
+    border-radius: 8px;
+    padding: 10px;
+
+    /* needed to prevent text overflowing but doesn't require a flex: 1 on the sidebar-stream-item-text */
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar-stream-item:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.sidebar-stream-item-pfp-container {
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+}
+
+.sidebar-stream-item-pfp {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.stream-icon-container {
+    width: 50px;
+    /* used to be 100% but then that would sequeeze the group icon, so I set a fixed size */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 50%;
+    background-color: rgb(215, 215, 215);
+}
+
+.group-icon {
+    line-height: 50px;
+    vertical-align: middle;
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar-stream-item-list {
+    flex: 1;
+    flex-basis: 0px;
+    /* necessary to prevent the element from expanding to accomodat the (total) height of all child divs */
+    overflow-y: auto;
+
+    -ms-overflow-style: none;
+    /* Hide scrollbar in Internet Explorer and Edge */
+    scrollbar-width: none;
+    /* Hide scrollbar in Firefox */
+}
+
+.sidebar-stream-item-list::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar in Chrome, Safari, and Opera */
+}
+
+.sidebar-stream-item-text {
+    display: inline-block;
+    height: 50px;
+    margin-left: 10px;
+    vertical-align: bottom;
+    /* makes sure the divs are in alignment! */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-stream-item-header {
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-stream-item-header-id {
+    margin-left: 10px;
+    color: rgb(122, 122, 122);
+    font-size: 10px;
+}
+
+.sidebar-stream-item-last-message {
+    font-size: medium;
+    color: grey;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* SIDEBAR BOTTOM */
+
+.sidebar-bottom-text {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 45px;
+}
+
+.sidebar-bottom img {
+    margin-right: 10px;
+    height: 45px;
+}
+
+.user-name {
+    font-size: medium;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sidebar-bottom .local-id {
+    border-radius: 5px;
+    padding: 5px;
+
+    font-size: x-small;
+    background-color: #efeeee;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sidebar-bottom .local-id:hover {
+    background-color: rgb(204, 204, 204);
+}
