@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/lightning-notes/static/css/main.84abd9fb.css",
+    "main.js": "/lightning-notes/static/js/main.355cacff.js",
+    "index.html": "/lightning-notes/index.html",
+    "main.84abd9fb.css.map": "/lightning-notes/static/css/main.84abd9fb.css.map",
+    "main.355cacff.js.map": "/lightning-notes/static/js/main.355cacff.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.84abd9fb.css",
+    "static/js/main.355cacff.js"
+  ]
+}
