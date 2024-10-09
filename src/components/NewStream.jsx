@@ -7,7 +7,7 @@ import { addDoc, collection, onSnapshot, serverTimestamp, where, query, orderBy,
 
 export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected, setIsStreamSelected, authenticatedUser }) => {
     const [name, setName] = useState("")
-    const [members, setMembers] = useState([""]) // TODO: implement duplicate value checking in the backend
+    const [members, setMembers] = useState([]) // TODO: implement duplicate value checking in the backend
     const [memberValidity, setMemberValidity] = useState([false])
     const [admins, setAdmins] = useState([false])
 
@@ -98,11 +98,11 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                         </div>
                         <div>
                             <div>
-                                <h4>Members</h4>
+                                <h4>Colloborate</h4>
                             </div>
                             <div>
-                                <p className='caption'>You will automatically be added as a member of a stream that you create. Using the fields below you can also add other users to the stream using their ID (which ends with an @ sign followed by the service name).</p>
-                                <p className='caption'>Lightning Notes uses randomly generated unique identifiers for addressing in order to prevent spam. To start a new stream, ask the people you want to stream with to provide their identifiers, which are displayed in the bottom left corner.</p>
+                                <p className='caption'>You will automatically be added as a member of a stream that you create. Using the fields below you can also share the stream with other users to the stream using their ID who can also add their own notes to the stream.</p>
+                                <p className='caption'>Lightning Notes uses randomly generated unique identifiers for addressing in order to prevent spam. To start a new stream, ask the people you want to share the stream with to provide their identifiers, which are displayed in the bottom left corner.</p>
                             </div>
                             <div>
                                 <div>
@@ -140,25 +140,20 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                                                         </span>
                                                     </div>
                                                 }
-                                                {members.length > 1 ?
+                                                <div
+                                                    className='form-field-input-side-button-container'
+                                                    title="Remove user"
+                                                    onClick={() => {
+                                                        setMembers([...members.slice(0, index), ...members.slice(index + 1)])
+                                                        setAdmins([...admins.slice(0, index), ...admins.slice(index + 1)])
+                                                    }}
+                                                >
                                                     <div
-                                                        className='form-field-input-side-button-container'
-                                                        title="Remove user"
-                                                        onClick={() => {
-                                                            setMembers([...members.slice(0, index), ...members.slice(index + 1)])
-                                                            setAdmins([...admins.slice(0, index), ...admins.slice(index + 1)])
-                                                        }}
+                                                        className="material-symbols-outlined"
                                                     >
-                                                        <div
-
-                                                            style={{ display: members.length > 1 ? 'inline-block' : 'none' }}
-                                                            className="material-symbols-outlined"
-                                                        >
-                                                            cancel
-                                                        </div>
+                                                        cancel
                                                     </div>
-                                                    : null
-                                                }
+                                                </div>
                                             </div>
                                             {member === authenticatedUser.id_local && <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p>}
                                             {memberAlreadyAdded(member, index)}
@@ -177,7 +172,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                                         setAdmins(newAdmins)
                                     }}
                                     >
-                                        Add member
+                                        Add user
                                     </button>
                                 </div>
                             </div>

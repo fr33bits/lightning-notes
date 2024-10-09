@@ -10,36 +10,27 @@ import { getStreamName } from '../functions/data.js';
 import Cookies from 'universal-cookie'
 const cookies = new Cookies();
 
-const Avatars = ({ stream_member_ids, authenticatedUser }) => {
-    const [members, setMembers] = useState([]) // excludes the authenticated user
-
-    useEffect(() => {
-        const getPhotos = async () => {
-            const usersRef = collection(db, 'users')
-            const getUser = async (user_id) => {
-                const q = query(usersRef, where("id_local", "==", user_id))
-                const querySnapshot = await getDocs(q);
-                const users = querySnapshot.docs.map(doc => doc.data());
-                return users[0]
-            }
-            const member_ids = stream_member_ids.filter(element => element !== authenticatedUser.id_local)
-            const membersTemp = []
-            for (let i = 0; i < member_ids.length; i++) {
-                const memberTemp = await getUser(member_ids[i])
-                membersTemp.push(memberTemp)
-            }
-            setMembers(membersTemp)
+const StreamIcon = ({ reserved_stream, stream_name, stream_icon_uri, group_stream }) => {
+    let icon
+    if (reserved_stream) {
+        if (stream_name === '_unsorted') {
+            icon = <span className="material-symbols-outlined group-icon-google">scatter_plot</span>
+        } else if (stream_name === '_inbox') {
+            icon = <span className="material-symbols-outlined group-icon-google">inbox</span>
+        } else if (stream_name === '_all') {
+            icon = <span className="material-symbols-outlined group-icon-google">all_inbox</span>
         }
-        getPhotos()
-    }, [stream_member_ids])
+    } else if (stream_icon_uri) {
+        icon = <img src={stream_icon_uri} className='sidebar-stream-item-icon' />
+    } else if (group_stream) {
+        icon = <span className="material-symbols-outlined group-icon-google">groups</span>
+    } else {
+        icon = <span className="material-symbols-outlined group-icon-google">folder</span>
+    }
 
     return (
         <div className='stream-icon-container'>
-            {members.length === 0 ? (<span className="material-symbols-outlined group-icon">
-                groups
-            </span>) : null}
-            {members?.length > 0 ?
-                (<img src={members[0]?.photo_url} alt="Avatar" className='sidebar-stream-item-pfp' />) : null}
+            {icon}
         </div>
     )
 }
@@ -94,8 +85,13 @@ const StreamListItem = ({ stream, setSelectedStream, setIsStreamSelected, authen
 
     return (
         <div className='sidebar-stream-item' onClick={selectStream}>
-            <div className='sidebar-stream-item-pfp-container'>
-                <Avatars stream_member_ids={stream.member_ids} authenticatedUser={authenticatedUser} />
+            <div className='sidebar-stream-item-icon-container'>
+                <StreamIcon
+                    reserved_stream={stream.reserved}
+                    stream_name={stream.name}
+                    stream_icon_uri={stream.icon_uri}
+                    group_stream={stream.member_ids > 1}
+                />
             </div>
             <div className='sidebar-stream-item-text'>
                 <div className='sidebar-stream-item-header' title={"Stream ID: " + stream.id}>

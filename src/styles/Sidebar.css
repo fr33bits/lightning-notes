@@ -77,13 +77,13 @@
     background-color: rgb(240, 240, 240);
 }
 
-.sidebar-stream-item-pfp-container {
+.sidebar-stream-item-icon-container {
     display: inline-block;
     height: 50px;
     width: 50px;
 }
 
-.sidebar-stream-item-pfp {
+.sidebar-stream-item-icon {
     height: 100%;
     width: 100%;
     border-radius: 50%;
@@ -98,14 +98,25 @@
     align-items: center;
     text-align: center;
     border-radius: 50%;
-    background-color: rgb(215, 215, 215);
+
+    /* Removed because it adds too much visual complexity when icons would otherwise not be circular anyway*/
+    /* background-color: rgb(215, 215, 215); */
 }
 
-.group-icon {
+.stream-icon-google {
     line-height: 50px;
     vertical-align: middle;
     height: 100%;
     width: 100%;
+}
+
+.material-symbols-outlined.group-icon-google {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+  font-size: 30px;
 }
 
 .sidebar-stream-item-list {

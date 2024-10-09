@@ -4,6 +4,7 @@ import { signInWithPopup } from 'firebase/auth'
 import { addDoc, collection, serverTimestamp, where, getDocs, query } from 'firebase/firestore'
 
 import '../styles/Auth.css'
+import { getUser } from '../functions/firebaseCalls'
 
 import Cookies from 'universal-cookie'
 const cookies = new Cookies();
@@ -48,13 +49,6 @@ export const Auth = ({ setIsAuthenticated, setAuthenticatedUser }) => {
         } catch (err) {
             console.error(err)
         }
-    }
-
-    const getUser = async (user_id) => {
-        const q = query(usersRef, where("id_local", "==", user_id))
-        const querySnapshot = await getDocs(q);
-        const users = querySnapshot.docs.map(doc => doc.data());
-        return users;
     }
 
     const signInWithGoogle = async () => {

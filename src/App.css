@@ -131,7 +131,7 @@ body,
 
 .form-field label {
   margin-bottom: 0.45rem;
-  color: #2397d1;
+  color: #DDA601;
   font-size: 12px;
   font-family: Arial, Helvetica, sans-serif;
   letter-spacing: 0.7px;
@@ -166,13 +166,13 @@ body,
 }
 
 .form-field-input:hover {
-  border-color: #2397d1;
+  border-color: #DDA601;
 }
 
 .form-field-input:focus,
 .form-field-input:active {
-  box-shadow: 0px 0px 0px 1.5px #2397d1;
-  border-color: #2397d1;
+  box-shadow: 0px 0px 0px 1.5px #DDA601;
+  border-color: #DDA601;
 }
 
 .form-field-input {
@@ -180,7 +180,7 @@ body,
 }
 
 .form-error-message {
-  color: #2397d1;
+  color: #DDA601;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   text-align: center;
@@ -196,8 +196,8 @@ body,
 .form-button button {
   width: 50%;
   border-radius: 25px;
-  background: #2397d1;
-  border: 3px solid #2397d1;
+  background: #DDA601;
+  border: 3px solid #DDA601;
   color: white;
   font-weight: 800;
   padding: 0.7rem 1.2rem;
@@ -207,7 +207,7 @@ body,
 }
 
 .form-button button:hover {
-  background: #1d7aa9; /* changed a little */
+  background: #ba8c02; /* changed a little */
 }
 
 .form-button button:disabled {

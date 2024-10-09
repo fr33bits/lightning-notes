@@ -5,14 +5,16 @@ import { addDoc, collection, onSnapshot, serverTimestamp, where, query, orderBy,
 import { auth, db } from '../firebase-config.js'
 
 import { getStreamName } from '../functions/data.js'
+import { getUser } from '../functions/firebaseCalls.js'
 
 import '../styles/Stream.css'
+import { Note } from './Note.jsx'
 
 const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettings, authenticatedUser }) => { // takes a lot of things after NewStream.jsx
     const [name, setName] = useState(selectedStream.name)
     const [members, setMembers] = useState(selectedStream.member_ids)
     const [memberValidity, setMemberValidity] = useState([false]) // set to false just in case one of the users deleted their account while this window is open (though this would probably be caught upstream anyway)
-    
+
     const generateBoolArray = (admin_ids, member_ids) => {
         let boolArray = []
         member_ids.forEach((member_id, index) => {
@@ -99,157 +101,155 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
         return null
     }
 
-return (
-    <div className='card-container card-container-float card-container-blur' onClick={(e) => { if (e.target !== e.currentTarget) return; setShowStreamSettings(false) }}>
-        <div className='card' onClick={() => null}>
-            {!selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
-                <p className='caption' style={{ color: 'red', textAlign: 'center' }}>You are not an admin of this stream. You can only view but not change the stream name and its members.</p>
-                : null
-            }
-            <form>
-                <div className='form-field'>
-                    <label htmlFor='streamName'>Stream name</label>
-                    <input
-                        name='streamName'
-                        className='form-field-input'
-                        placeholder='Stream name'
-                        defaultValue={selectedStream.name}
-                        onChange={(e) => { setName(e.target.value) }}
-                        disabled={!selectedStream.admin_ids.includes(authenticatedUser.id_local)}
-                    />
-                </div>
-                <div>
-                    <div>
-                        <h4>Members</h4>
-                    </div>
-                    <div>
-                        <p className='caption'>You cannot remove yourself as a member of this stream here. If you want to remove yourself from this stream, please use the 'Leave stream' button.</p>
-                        {selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
-                            <div>
-                                <p className='caption'>You cannot remove all other members from the stream as the stream must have at least two members. All other members can however leave the stream themselves.</p>
-                                <p className='caption'>Using the fields below you can also add other users to the stream using their ID (which ends with an @ sign followed by the service name).</p>
-                                <p className='caption'>Lightning Notes uses randomly generated unique identifiers for addressing in order to prevent spam. To add a user to the stream, ask them to provide you their identifier, which is displayed in the bottom left corner.</p>
-                            </div>
-                            : null
-                        }
+    return (
+        <div className='card-container card-container-float card-container-blur' onClick={(e) => { if (e.target !== e.currentTarget) return; setShowStreamSettings(false) }}>
+            <div className='card' onClick={() => null}>
+                {!selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                    <p className='caption' style={{ color: 'red', textAlign: 'center' }}>You are not an admin of this stream. You can only view but not change the stream name and its members.</p>
+                    : null
+                }
+                <form>
+                    <div className='form-field'>
+                        <label htmlFor='streamName'>Stream name</label>
+                        <input
+                            name='streamName'
+                            className='form-field-input'
+                            placeholder='Stream name'
+                            defaultValue={selectedStream.name}
+                            onChange={(e) => { setName(e.target.value) }}
+                            disabled={!selectedStream.admin_ids.includes(authenticatedUser.id_local)}
+                        />
                     </div>
                     <div>
                         <div>
-                            {members.map((member, index) => (
-                                <div key={index} className='form-field'>
-                                    <label htmlFor={'user' + index}>
-                                        User {index + 1}
-                                        {member === authenticatedUser.id_local && !memberAlreadyAdded(member, index) ? <span className='pill pill-you'>You</span> : null}
-                                        {selectedStream.admin_ids.includes(member) && !memberAlreadyAdded(member, index) ? <span className='pill pill-admin'>Admin</span> : null}
-                                    </label>
-                                    {/* TODO: fix the fact that pressing enter creates more null elements: likely simulates button press? */}
-                                    {/* A separate div is needed below the label, otherwise the icon won't behave like an inline-blook */}
-                                    <div className='form-field-input-container'>
-                                        <input
-                                            name={'user' + index}
-                                            className={memberValidity[index] ? 'field-valid form-field-input' : 'field-invalid form-field-input'}
-                                            placeholder='Global user ID'
-                                            value={member}
-                                            onChange={(e) => {
-                                                const newMembers = [...members] // spread needed to make sure that the array is actually copied instead of pasting a reference
-                                                newMembers[index] = e.target.value
-                                                setMembers(newMembers)
-                                            }}
-                                            disabled={
-                                                !selectedStream.admin_ids.includes(authenticatedUser.id_local) ||
-                                                member === authenticatedUser.id_local && !memberAlreadyAdded(member, index)
-                                            }
-                                        />
-                                        {selectedStream.admin_ids.includes(authenticatedUser.id_local) ? admins[index] ?
-                                            <div
-                                                className='form-field-input-side-button-container'
-                                                title="Remove admin privileges"
-                                                onClick={() => setAdmins((prevAdmins) => prevAdmins.map((admin, i) => (i === index ? false : admin)))}>
-                                                <span className="material-symbols-outlined">
-                                                    remove_moderator
-                                                </span>
-                                            </div> :
-                                            <div
-                                                className='form-field-input-side-button-container'
-                                                title="Make user an admin"
-                                                onClick={() => setAdmins((prevAdmins) => prevAdmins.map((admin, i) => (i === index ? true : admin)))}>
-                                                <span className="material-symbols-outlined">
-                                                    add_moderator
-                                                </span>
-                                            </div>
-                                            : null
-                                        }
-                                        {selectedStream.admin_ids.includes(authenticatedUser.id_local) && (member !== authenticatedUser.id_local || memberAlreadyAdded(member, index)) ?
-                                            <div
-                                                className='form-field-input-side-button-container'
-                                                title="Remove user"
-                                                onClick={() => {
-                                                    setMembers([...members.slice(0, index), ...members.slice(index + 1)])
-                                                    setAdmins([...admins.slice(0, index), ...admins.slice(index + 1)]) // !!! ne začne pri 1
+                            <h4>Members</h4>
+                        </div>
+                        <div>
+                            <p className='caption'>You cannot remove yourself as a member of this stream here. If you want to remove yourself from this stream, please use the 'Leave stream' button.</p>
+                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                                <div>
+                                    <p className='caption'>You cannot remove all other members from the stream as the stream must have at least two members. All other members can however leave the stream themselves.</p>
+                                    <p className='caption'>Using the fields below you can also add other users to the stream using their ID (which ends with an @ sign followed by the service name).</p>
+                                    <p className='caption'>Lightning Notes uses randomly generated unique identifiers for addressing in order to prevent spam. To add a user to the stream, ask them to provide you their identifier, which is displayed in the bottom left corner.</p>
+                                </div>
+                                : null
+                            }
+                        </div>
+                        <div>
+                            <div>
+                                {members.map((member, index) => (
+                                    <div key={index} className='form-field'>
+                                        <label htmlFor={'user' + index}>
+                                            User {index + 1}
+                                            {member === authenticatedUser.id_local && !memberAlreadyAdded(member, index) ? <span className='pill pill-you'>You</span> : null}
+                                            {selectedStream.admin_ids.includes(member) && !memberAlreadyAdded(member, index) ? <span className='pill pill-admin'>Admin</span> : null}
+                                        </label>
+                                        {/* TODO: fix the fact that pressing enter creates more null elements: likely simulates button press? */}
+                                        {/* A separate div is needed below the label, otherwise the icon won't behave like an inline-blook */}
+                                        <div className='form-field-input-container'>
+                                            <input
+                                                name={'user' + index}
+                                                className={memberValidity[index] ? 'field-valid form-field-input' : 'field-invalid form-field-input'}
+                                                placeholder='Global user ID'
+                                                value={member}
+                                                onChange={(e) => {
+                                                    const newMembers = [...members] // spread needed to make sure that the array is actually copied instead of pasting a reference
+                                                    newMembers[index] = e.target.value
+                                                    setMembers(newMembers)
                                                 }}
-                                            >
+                                                disabled={
+                                                    !selectedStream.admin_ids.includes(authenticatedUser.id_local) ||
+                                                    member === authenticatedUser.id_local && !memberAlreadyAdded(member, index)
+                                                }
+                                            />
+                                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) ? admins[index] ?
                                                 <div
-                                                    style={{ display: members.length > 0 ? 'inline-block' : 'none' }}
-                                                    className="material-symbols-outlined"
-                                                
-                                                >
-                                                    cancel
+                                                    className='form-field-input-side-button-container'
+                                                    title="Remove admin privileges"
+                                                    onClick={() => setAdmins((prevAdmins) => prevAdmins.map((admin, i) => (i === index ? false : admin)))}>
+                                                    <span className="material-symbols-outlined">
+                                                        remove_moderator
+                                                    </span>
+                                                </div> :
+                                                <div
+                                                    className='form-field-input-side-button-container'
+                                                    title="Make user an admin"
+                                                    onClick={() => setAdmins((prevAdmins) => prevAdmins.map((admin, i) => (i === index ? true : admin)))}>
+                                                    <span className="material-symbols-outlined">
+                                                        add_moderator
+                                                    </span>
                                                 </div>
-                                            </div>
+                                                : null
+                                            }
+                                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) && (member !== authenticatedUser.id_local || memberAlreadyAdded(member, index)) ?
+                                                <div
+                                                    className='form-field-input-side-button-container'
+                                                    title="Remove user"
+                                                    onClick={() => {
+                                                        setMembers([...members.slice(0, index), ...members.slice(index + 1)])
+                                                        setAdmins([...admins.slice(0, index), ...admins.slice(index + 1)]) // !!! ne začne pri 1
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{ display: members.length > 0 ? 'inline-block' : 'none' }}
+                                                        className="material-symbols-outlined"
+
+                                                    >
+                                                        cancel
+                                                    </div>
+                                                </div>
+                                                : null
+                                            }
+                                        </div>
+                                        {memberAlreadyAdded(member, index) ?
+                                            member === authenticatedUser.id_local ?
+                                                <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p> :
+                                                <p className='caption' style={{ color: 'red' }}>This user has already been added above!</p>
                                             : null
                                         }
                                     </div>
-                                    {memberAlreadyAdded(member, index) ?
-                                        member === authenticatedUser.id_local ?
-                                            <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p> :
-                                            <p className='caption' style={{ color: 'red' }}>This user has already been added above!</p>
-                                        : null
-                                    }
-                                </div>
-                            ))}
-                        </div>
-                        {admins.every(value => value === false) ? <p className='caption' style={{ color: 'red' , textAlign: 'center'}}>The stream must have at least one admin!</p> : null}
-                        {selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
-                            <div className='form-button'>
-                                {/* !!! For some reason this is already pushed to the list of members even without the button being clicked */}
-                                <button type='button' onClick={(e) => { // setting the button type to 'button' (instead of not setting the button type, which defaults to submit) has the same effect as e.preventDefault()
-                                    let newMembers = [...members] // spread necessary, otherwise new members don't show up (see above)
-                                    newMembers.push("");
-                                    setMembers(newMembers)
-
-                                    let newAdmins = [...admins]
-                                    newAdmins.push(false);
-                                    setAdmins(newAdmins)
-                                }}
-                                >
-                                    Add member
-                                </button>
+                                ))}
                             </div>
-                            : null
-                        }
-                    </div>
-                </div>
-                {!selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
-                    <div className='form-button'>
-                        <button type='button' onClick={() => setShowStreamSettings(false)}>Close</button>
-                    </div>
-                    :
-                    <div>
-                        {error ? <p className='form-error-message'>{error}</p> : null}
-                        <div className='form-button'>
-                            <button type='submit' disabled={!formComplete()} onClick={(e) => { updateStream(e) }}>Save</button>
+                            {admins.every(value => value === false) ? <p className='caption' style={{ color: 'red', textAlign: 'center' }}>The stream must have at least one admin!</p> : null}
+                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                                <div className='form-button'>
+                                    {/* !!! For some reason this is already pushed to the list of members even without the button being clicked */}
+                                    <button type='button' onClick={(e) => { // setting the button type to 'button' (instead of not setting the button type, which defaults to submit) has the same effect as e.preventDefault()
+                                        let newMembers = [...members] // spread necessary, otherwise new members don't show up (see above)
+                                        newMembers.push("");
+                                        setMembers(newMembers)
+
+                                        let newAdmins = [...admins]
+                                        newAdmins.push(false);
+                                        setAdmins(newAdmins)
+                                    }}
+                                    >
+                                        Add member
+                                    </button>
+                                </div>
+                                : null
+                            }
                         </div>
                     </div>
-                }
-            </form>
+                    {!selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                        <div className='form-button'>
+                            <button type='button' onClick={() => setShowStreamSettings(false)}>Close</button>
+                        </div>
+                        :
+                        <div>
+                            {error ? <p className='form-error-message'>{error}</p> : null}
+                            <div className='form-button'>
+                                <button type='submit' disabled={!formComplete()} onClick={(e) => { updateStream(e) }}>Save</button>
+                            </div>
+                        </div>
+                    }
+                </form>
+            </div>
         </div>
-    </div>
-)
+    )
 }
 
 export const Stream = ({ selectedStream, setSelectedStream, authenticatedUser, setShowStreamSettings, showStreamSettings }) => {
-    const { format } = require('date-fns');
-
     const messagesRef = collection(db, 'messages')
     const [messages, setMessages] = useState([])
 
@@ -296,43 +296,6 @@ export const Stream = ({ selectedStream, setSelectedStream, authenticatedUser, s
         }
     }
 
-    // USER DATA
-    const [senders, setSenders] = useState([])
-    useEffect(() => {
-        const fetchSenders = async () => {
-            const uniqueSenderIDs = []
-            for (let i = 0; i < messages.length; i++) {
-                const sender_id = messages[i].sender_id
-                if (!uniqueSenderIDs.includes(sender_id)) {
-                    uniqueSenderIDs.push(sender_id)
-                }
-            }
-
-            const usersRef = collection(db, 'users')
-            async function getUser(user_id) {
-                const q = query(usersRef, where("id_local", "==", user_id))
-                const querySnapshot = await getDocs(q);
-                const users = querySnapshot.docs.map(doc => doc.data());
-                return users[0]
-            }
-
-            const streamSenders = []
-            for (let i = 0; i < uniqueSenderIDs.length; i++) {
-                const data = await getUser(uniqueSenderIDs[i])
-                streamSenders[uniqueSenderIDs[i]] = data
-            }
-            setSenders(streamSenders)
-        }
-
-        fetchSenders()
-    }, [messages])
-
-    const getDate = (firestore_timestamp) => {
-        const milliseconds = firestore_timestamp?.seconds * 1000 + firestore_timestamp?.nanoseconds / 1000000;
-        const javascriptDate = new Date(milliseconds);
-        return javascriptDate
-    }
-
     const leaveStream = async () => {
         const docRef = doc(db, "streams", selectedStream.id)
         const confirmation = window.confirm(`Are you sure you want to exit the stream "${selectedStream.name}"?`)
@@ -370,48 +333,30 @@ export const Stream = ({ selectedStream, setSelectedStream, authenticatedUser, s
                 {/* TODO: order of these float: right divs unclear */}
                 {
                     selectedStream.reserved ? null :
-                    <div className='header-item' style={{ float: 'right' }}>
-                        <span className="material-symbols-outlined leave-stream-icon" title="Leave stream" onClick={() => leaveStream()}>
-                            group_remove
-                        </span>
-                    </div>
+                        <div className='header-item' style={{ float: 'right' }}>
+                            <span className="material-symbols-outlined leave-stream-icon" title="Leave stream" onClick={() => leaveStream()}>
+                                group_remove
+                            </span>
+                        </div>
                 }
             </div>
+
+            {/* Message */}
             <div className='messages-container'>
                 <div className='messages'>
                     {messages.map((message, index) => (
-                        <div key={index} className='message-row'>
-                            <div
-                                id={message.id}
-                                key={message.id}
-                                className={message.sender_id === authenticatedUser.id_local ? 'message own-message' : 'message not-own-message'}
-                                style={{ textAlign: message.sender_id === authenticatedUser.id_local ? 'right' : 'left' }}
-                            >
-                                <div className='message-user'>{senders[message.sender_id]?.name}</div>
-                                <div
-                                    className='message-text'
-                                    style={
-                                        {
-                                            marginLeft: message.sender_id === authenticatedUser.id_local ? 'auto' : '0',
-                                            borderRadius: message.sender_id === authenticatedUser.id_local ? '15px 15px 0 15px' : '15px 15px 15px 0'
-                                        }
-                                    }
-                                    title={'Message ID: ' + message.id
-                                        + '\n' + getDate(message.created_at)
-                                    }
-                                >
-                                    {/* Style needed to push the message text to the right even though the parent div is already pushed to the right */}
-                                    {message.text}
-                                </div>
-                                {/* <div className='message-timestamp'>
-                                        {message?.created_at?.seconds ? getDate(message.created_at.seconds) : null}
-                                    </div> */}
-                            </div>
-                        </div>
+                        <Note 
+                            key={index}
+                            message={message}
+                            index={index}
+                            author={getUser(message.sender_id)}
+                        />
                     ))}
                     <div ref={messagesEndRef}></div>
                 </div>
             </div>
+
+            {/* Message form */}
             <div className='new-message-form-container-background'>
                 <div className='new-message-form-container'>
                     <form onSubmit={handleSubmit} className="new-message-form">
@@ -421,8 +366,11 @@ export const Stream = ({ selectedStream, setSelectedStream, authenticatedUser, s
                             className="new-message-input"
                             placeholder="Type a note..."
                         />
-                        <button type="submit" className="send-button" title="Click to change the world!"
-                            style={{padding: '0px 12px', fontSize: '25px'}}
+                        <button
+                            type="submit"
+                            className="add-note-button"
+                            title="Add note"
+                            style={{ padding: '0px 12px', fontSize: '25px' }}
                         >
                             {/* <span class="material-symbols-outlined">add</span> */}
                             +

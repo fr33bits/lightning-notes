@@ -9,3 +9,9 @@ export function getStreamName(streamName) {
             return streamName
     }
 }
+
+export function getDate(firestore_timestamp) {
+    const milliseconds = firestore_timestamp?.seconds * 1000 + firestore_timestamp?.nanoseconds / 1000000;
+    const javascriptDate = new Date(milliseconds);
+    return javascriptDate
+}
