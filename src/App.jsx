@@ -4,6 +4,8 @@ import './App.css' // somehow styles from other CSS files are also availible
 import { auth, db } from './firebase-config.js'
 import { doc, getDoc, query, where, getDocs, collection, onSnapshot } from 'firebase/firestore'
 
+import { copyToClipboard } from './functions/utils.js'
+
 import { Auth } from './components/Auth.jsx'
 import { Stream } from './components/Stream.jsx'
 import { Sidebar } from './components/Sidebar.jsx'
@@ -31,7 +33,7 @@ function App() {
   //   const getSetUser = async () => {
   //     if (isAuthenticated) {
   //       const usersRef = collection(db, 'users')
-  //       const q = query(usersRef, where("id_local", "==", user_id))
+  //       const q = query(usersRef, where("id", "==", user_id))
   //       const querySnapshot = await getDocs(q);
   //       const users = querySnapshot.docs.map(doc => doc.data());
   //       setAuthenticatedUser(users[0])
@@ -39,16 +41,6 @@ function App() {
   //   }
   //   getSetUser()
   // }, []) // only runs once and after refresh
-
-  const copyToClipboard = (text_to_copy) => {
-    navigator.clipboard.writeText(text_to_copy)
-      .then(() => {
-        console.log('Text copied to clipboard');
-      })
-      .catch(err => {
-        console.error('Failed to copy text: ', err);
-      });
-  }
 
   // !!! tried to have selected stream details update in real time but didn't get it working
   // useEffect(() => {
@@ -95,9 +87,9 @@ function App() {
                 className='local-id'
                 title="Click to copy to clipboard"
                 data-toggle="tooltip" data-placement="top"
-                onClick={() => copyToClipboard(authenticatedUser.id_local)}
+                onClick={() => copyToClipboard(authenticatedUser.id)}
               >
-                {authenticatedUser.id_local}
+                {authenticatedUser.id}
               </div>
             </div>
             {/* <span class="material-symbols-outlined" height='25'>

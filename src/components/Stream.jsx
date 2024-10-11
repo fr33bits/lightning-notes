@@ -62,9 +62,9 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
         const validateMembers = async (members) => {
             const newMemberValidity = Array(members.length).fill(false)
             for (let i = 0; i < members.length; i++) {
-                const checkValidityForSpecificMember = async (user_id_local) => {
+                const checkValidityForSpecificMember = async (user_id) => {
                     // check the user isn't the currently authenticated user
-                    if (authenticatedUser.id_local === user_id_local && memberAlreadyAdded(user_id_local, i)) return false
+                    if (authenticatedUser.id === user_id && memberAlreadyAdded(user_id, i)) return false
 
                     // check that the user has already been previously entered (the first instance of the user returns as valid)
                     for (let j = 0; j < i; j++) {
@@ -74,7 +74,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                     }
 
                     // check that the user actually exists in the system
-                    const q = query(usersRef, where("id_local", "==", user_id_local))
+                    const q = query(usersRef, where("id", "==", user_id))
                     const querySnapshot = await getDocs(q)
                     const users = querySnapshot.docs.map(doc => doc.data())
                     return users.length > 0
@@ -104,7 +104,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
     return (
         <div className='card-container card-container-float card-container-blur' onClick={(e) => { if (e.target !== e.currentTarget) return; setShowStreamSettings(false) }}>
             <div className='card' onClick={() => null}>
-                {!selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                {!selectedStream.admin_ids.includes(authenticatedUser.id) ?
                     <p className='caption' style={{ color: 'red', textAlign: 'center' }}>You are not an admin of this stream. You can only view but not change the stream name and its members.</p>
                     : null
                 }
@@ -117,7 +117,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                             placeholder='Stream name'
                             defaultValue={selectedStream.name}
                             onChange={(e) => { setName(e.target.value) }}
-                            disabled={!selectedStream.admin_ids.includes(authenticatedUser.id_local)}
+                            disabled={!selectedStream.admin_ids.includes(authenticatedUser.id)}
                         />
                     </div>
                     <div>
@@ -126,7 +126,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                         </div>
                         <div>
                             <p className='caption'>You cannot remove yourself as a member of this stream here. If you want to remove yourself from this stream, please use the 'Leave stream' button.</p>
-                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                            {selectedStream.admin_ids.includes(authenticatedUser.id) ?
                                 <div>
                                     <p className='caption'>You cannot remove all other members from the stream as the stream must have at least two members. All other members can however leave the stream themselves.</p>
                                     <p className='caption'>Using the fields below you can also add other users to the stream using their ID (which ends with an @ sign followed by the service name).</p>
@@ -141,7 +141,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                                     <div key={index} className='form-field'>
                                         <label htmlFor={'user' + index}>
                                             User {index + 1}
-                                            {member === authenticatedUser.id_local && !memberAlreadyAdded(member, index) ? <span className='pill pill-you'>You</span> : null}
+                                            {member === authenticatedUser.id && !memberAlreadyAdded(member, index) ? <span className='pill pill-you'>You</span> : null}
                                             {selectedStream.admin_ids.includes(member) && !memberAlreadyAdded(member, index) ? <span className='pill pill-admin'>Admin</span> : null}
                                         </label>
                                         {/* TODO: fix the fact that pressing enter creates more null elements: likely simulates button press? */}
@@ -158,11 +158,11 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                                                     setMembers(newMembers)
                                                 }}
                                                 disabled={
-                                                    !selectedStream.admin_ids.includes(authenticatedUser.id_local) ||
-                                                    member === authenticatedUser.id_local && !memberAlreadyAdded(member, index)
+                                                    !selectedStream.admin_ids.includes(authenticatedUser.id) ||
+                                                    member === authenticatedUser.id && !memberAlreadyAdded(member, index)
                                                 }
                                             />
-                                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) ? admins[index] ?
+                                            {selectedStream.admin_ids.includes(authenticatedUser.id) ? admins[index] ?
                                                 <div
                                                     className='form-field-input-side-button-container'
                                                     title="Remove admin privileges"
@@ -181,7 +181,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                                                 </div>
                                                 : null
                                             }
-                                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) && (member !== authenticatedUser.id_local || memberAlreadyAdded(member, index)) ?
+                                            {selectedStream.admin_ids.includes(authenticatedUser.id) && (member !== authenticatedUser.id || memberAlreadyAdded(member, index)) ?
                                                 <div
                                                     className='form-field-input-side-button-container'
                                                     title="Remove user"
@@ -202,7 +202,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                                             }
                                         </div>
                                         {memberAlreadyAdded(member, index) ?
-                                            member === authenticatedUser.id_local ?
+                                            member === authenticatedUser.id ?
                                                 <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p> :
                                                 <p className='caption' style={{ color: 'red' }}>This user has already been added above!</p>
                                             : null
@@ -211,7 +211,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                                 ))}
                             </div>
                             {admins.every(value => value === false) ? <p className='caption' style={{ color: 'red', textAlign: 'center' }}>The stream must have at least one admin!</p> : null}
-                            {selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                            {selectedStream.admin_ids.includes(authenticatedUser.id) ?
                                 <div className='form-button'>
                                     {/* !!! For some reason this is already pushed to the list of members even without the button being clicked */}
                                     <button type='button' onClick={(e) => { // setting the button type to 'button' (instead of not setting the button type, which defaults to submit) has the same effect as e.preventDefault()
@@ -231,7 +231,7 @@ const StreamSettings = ({ selectedStream, setSelectedStream, setShowStreamSettin
                             }
                         </div>
                     </div>
-                    {!selectedStream.admin_ids.includes(authenticatedUser.id_local) ?
+                    {!selectedStream.admin_ids.includes(authenticatedUser.id) ?
                         <div className='form-button'>
                             <button type='button' onClick={() => setShowStreamSettings(false)}>Close</button>
                         </div>
@@ -289,7 +289,7 @@ export const Stream = ({ selectedStream, setSelectedStream, authenticatedUser, s
             await addDoc(messagesRef, {
                 text: newMessage,
                 created_at: serverTimestamp(),
-                sender_id: authenticatedUser.id_local,
+                sender_id: authenticatedUser.id,
                 stream_id: selectedStream.id
             })
             setNewMessage("")
@@ -302,8 +302,8 @@ export const Stream = ({ selectedStream, setSelectedStream, authenticatedUser, s
         if (confirmation) {
             try {
                 await updateDoc(docRef, {
-                    member_ids: arrayRemove(authenticatedUser.id_local),
-                    admin_ids: arrayRemove(authenticatedUser.id_local)
+                    member_ids: arrayRemove(authenticatedUser.id),
+                    admin_ids: arrayRemove(authenticatedUser.id)
                 })
             } catch (error) {
                 console.error("Error leaving stream: ", error)

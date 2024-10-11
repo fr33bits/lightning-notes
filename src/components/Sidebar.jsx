@@ -43,7 +43,7 @@ const StreamListItem = ({ stream, setSelectedStream, setIsStreamSelected, authen
         if (lastMessage) {
             const usersRef = collection(db, 'users')
             const getUser = async (user_id) => {
-                const q = query(usersRef, where("id_local", "==", user_id))
+                const q = query(usersRef, where("id", "==", user_id))
                 const querySnapshot = await getDocs(q);
                 const users = querySnapshot.docs.map(doc => doc.data());
                 setLastMessageUser(users[0]);
@@ -99,7 +99,7 @@ const StreamListItem = ({ stream, setSelectedStream, setIsStreamSelected, authen
                 </div>
                 {lastMessageUser?.name ?
                     <div className='sidebar-stream-item-last-message'>
-                        {lastMessageUser?.id_local === authenticatedUser.id_local ? 
+                        {lastMessageUser?.id === authenticatedUser.id ? 
                             'You' :
                             lastMessageUser?.name.split(' ')[0]
                         }
@@ -150,7 +150,7 @@ const StreamList = ({ setSelectedStream, setIsStreamSelected, authenticatedUser,
     useEffect(() => {
         const queryStreamList = query(
             streamsRef,
-            where("member_ids", "array-contains", authenticatedUser.id_local),
+            where("member_ids", "array-contains", authenticatedUser.id),
         )
 
         const unsubscribe = onSnapshot(queryStreamList, (snapshot) => {

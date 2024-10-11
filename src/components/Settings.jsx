@@ -13,7 +13,7 @@ export const Settings = ({ authenticatedUser, setShowSettings }) => {
                     {authenticatedUser.name}
                 </div>
                 <div className='local-id'>
-                    {authenticatedUser.id_local}
+                    {authenticatedUser.id}
                 </div>
             </div>
         </div>

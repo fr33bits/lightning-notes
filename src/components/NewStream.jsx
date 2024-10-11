@@ -12,7 +12,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
     const [admins, setAdmins] = useState([false])
 
     const getAdminList = () => {
-        let adminList = [authenticatedUser.id_local]
+        let adminList = [authenticatedUser.id]
         admins.forEach((admin, index) => {
             if (admin)
                 adminList.push(members[index])
@@ -27,8 +27,8 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
             const streamData = {
                 name: name,
                 created_at: serverTimestamp(),
-                created_by: authenticatedUser.id_local,
-                member_ids: [authenticatedUser.id_local, ...members],
+                created_by: authenticatedUser.id,
+                member_ids: [authenticatedUser.id, ...members],
                 admin_ids: getAdminList()
             }
             const docRef = await addDoc(streamsRef, streamData)
@@ -46,9 +46,9 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
         const validateMembers = async (members) => {
             const newMemberValidity = Array(members.length).fill(false)
             for (let i = 0; i < members.length; i++) {
-                const checkValidityForSpecificMember = async (user_id_local) => {
+                const checkValidityForSpecificMember = async (user_id) => {
                     // check the user isn't the currently authenticated user
-                    if (authenticatedUser.id_local === user_id_local) return false
+                    if (authenticatedUser.id === user_id) return false
 
                     // check that the user has already been previously entered (the first instance of the user returns as valid)
                     for (let j = 0; j < i; j++) {
@@ -58,7 +58,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                     }
 
                     // check that the user actually exists in the system
-                    const q = query(usersRef, where("id_local", "==", user_id_local))
+                    const q = query(usersRef, where("id", "==", user_id))
                     const querySnapshot = await getDocs(q)
                     const users = querySnapshot.docs.map(doc => doc.data())
                     return users.length > 0
@@ -98,7 +98,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                         </div>
                         <div>
                             <div>
-                                <h4>Colloborate</h4>
+                                <h4>Collaborate</h4>
                             </div>
                             <div>
                                 <p className='caption'>You will automatically be added as a member of a stream that you create. Using the fields below you can also share the stream with other users to the stream using their ID who can also add their own notes to the stream.</p>
@@ -155,7 +155,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                                                     </div>
                                                 </div>
                                             </div>
-                                            {member === authenticatedUser.id_local && <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p>}
+                                            {member === authenticatedUser.id && <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p>}
                                             {memberAlreadyAdded(member, index)}
                                         </div>
                                     ))}

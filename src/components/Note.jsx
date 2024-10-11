@@ -18,7 +18,7 @@ export const Note = ({message, author}) => {
 
     //         const usersRef = collection(db, 'users')
     //         async function getUser(user_id) {
-    //             const q = query(usersRef, where("id_local", "==", user_id))
+    //             const q = query(usersRef, where("id", "==", user_id))
     //             const querySnapshot = await getDocs(q);
     //             const users = querySnapshot.docs.map(doc => doc.data());
     //             return users[0]
