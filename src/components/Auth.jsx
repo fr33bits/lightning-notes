@@ -1,21 +1,19 @@
 import Cookies from 'universal-cookie'
 import { signInWithGoogle } from '../functions/firebaseCalls.js'
+import { useUser } from '../context/UserContext.js'
 
 import '../styles/Auth.css'
 
-export const Auth = ({ setIsAuthenticated, setAuthenticatedUser }) => {
+export const Auth = () => {
     const cookies = new Cookies();
+    const { setUserID, setLoading } = useUser()
 
     const signInGoogle = async () => {
         const result = await signInWithGoogle()
         cookies.set("auth-token", result.authToken)
-        setAuthenticatedState(result.authenticatedUser)
-    }
-
-    const setAuthenticatedState = (authenticatedUser) => {
-        setAuthenticatedUser(authenticatedUser)
-        setIsAuthenticated(true)
-        cookies.set("auth-user", authenticatedUser)
+        cookies.set("user_id", result.authenticatedUser.id)
+        setUserID(result.authenticatedUser.id)
+        setLoading(true)
     }
 
     return (
