@@ -5,14 +5,21 @@ import '../styles/NewStream.css'
 import { auth, db } from '../firebase-config.js'
 import { addDoc, collection, onSnapshot, serverTimestamp, where, query, orderBy, doc, getDocs } from 'firebase/firestore'
 
-export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected, setIsStreamSelected, authenticatedUser }) => {
+import { useStream } from '../context/StreamContext.js'
+import { useUser } from '../context/UserContext.js'
+
+export const NewStream = () => {
+    const values = useStream()
+    const setSelectedStream = values.setSelectedStream
+    const { user } = useUser()
+
     const [name, setName] = useState("")
     const [members, setMembers] = useState([]) // TODO: implement duplicate value checking in the backend
     const [memberValidity, setMemberValidity] = useState([false])
     const [admins, setAdmins] = useState([false])
 
     const getAdminList = () => {
-        let adminList = [authenticatedUser.id]
+        let adminList = [user.id]
         admins.forEach((admin, index) => {
             if (admin)
                 adminList.push(members[index])
@@ -27,15 +34,14 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
             const streamData = {
                 name: name,
                 created_at: serverTimestamp(),
-                created_by: authenticatedUser.id,
-                member_ids: [authenticatedUser.id, ...members],
+                created_by: user.id,
+                member_ids: [user.id, ...members],
                 admin_ids: getAdminList()
             }
             const docRef = await addDoc(streamsRef, streamData)
             streamData.id = docRef.id
 
             setSelectedStream(streamData)
-            setIsStreamSelected(true)
         } catch (err) {
             console.error(err)
         }
@@ -48,7 +54,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
             for (let i = 0; i < members.length; i++) {
                 const checkValidityForSpecificMember = async (user_id) => {
                     // check the user isn't the currently authenticated user
-                    if (authenticatedUser.id === user_id) return false
+                    if (user.id === user_id) return false
 
                     // check that the user has already been previously entered (the first instance of the user returns as valid)
                     for (let j = 0; j < i; j++) {
@@ -155,7 +161,7 @@ export const NewStream = ({ setSelectedStream, selectedStream, isStreamSelected,
                                                     </div>
                                                 </div>
                                             </div>
-                                            {member === authenticatedUser.id && <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p>}
+                                            {member === user.id && <p className='caption' style={{ color: 'red' }}>You cannot add yourself!</p>}
                                             {memberAlreadyAdded(member, index)}
                                         </div>
                                     ))}

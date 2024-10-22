@@ -1,5 +1,5 @@
 import { signInWithPopup } from 'firebase/auth'
-import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc } from "firebase/firestore";
+import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc, arrayRemove, updateDoc } from "firebase/firestore";
 
 import { auth, provider, db } from '../firebase-config.js'
 
@@ -117,5 +117,20 @@ export const createInboxStream = async (user) => {
         const docRef = await addDoc(streamsRef, streamData)
     } catch (err) {
         console.error(err)
+    }
+}
+
+export const leaveStream = async (stream, user_id) => {
+    const docRef = doc(db, "streams", stream.id)
+    const confirmation = window.confirm(`Are you sure you want to exit the stream "${stream.name}"?`)
+    if (confirmation) {
+        try {
+            await updateDoc(docRef, {
+                member_ids: arrayRemove(user_id),
+                admin_ids: arrayRemove(user_id)
+            })
+        } catch (error) {
+            console.error("Error leaving stream: ", error)
+        }
     }
 }

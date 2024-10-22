@@ -2,8 +2,10 @@ import { useState, useEffect } from "react"
 import { collection, query, where, getDocs, orderBy, limit, onSnapshot } from "firebase/firestore"
 
 import { db } from "../firebase-config"
-import { useUser } from "../context/UserContext"
 import { getStreamName } from "../functions/data"
+
+import { useUser } from "../context/UserContext"
+import { useStream } from "../context/StreamContext"
 
 const StreamIcon = ({ reserved_stream, stream_name, stream_icon_uri, group_stream }) => {
     let icon
@@ -30,8 +32,11 @@ const StreamIcon = ({ reserved_stream, stream_name, stream_icon_uri, group_strea
     )
 }
 
-export const StreamListItem = ({ stream, selectedStream, setSelectedStream }) => {
-    const { user, loading } = useUser();
+export const StreamListItem = ({ stream }) => {
+    const values = useStream()
+    const selectedStream = values?.selectedStream || null
+    const setSelectedStream = values.setSelectedStream
+    const { user } = useUser();
 
     const [lastMessage, setLastMessage] = useState(null)
     const [lastMessageUser, setLastMessageUser] = useState(null)
@@ -39,13 +44,13 @@ export const StreamListItem = ({ stream, selectedStream, setSelectedStream }) =>
     useEffect(() => {
         if (lastMessage) {
             const usersRef = collection(db, 'users')
-            const getUser = async (user_id) => {
-                const q = query(usersRef, where("id", "==", user_id))
+            const getUser = async () => {
+                const q = query(usersRef, where("id", "==", user.id))
                 const querySnapshot = await getDocs(q);
                 const users = querySnapshot.docs.map(doc => doc.data());
                 setLastMessageUser(users[0]);
             }
-            getUser(lastMessage.sender_id)
+            getUser(lastMessage.author_id)
         }
     }, [lastMessage])
 

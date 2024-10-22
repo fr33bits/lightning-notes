@@ -3,12 +3,14 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 
 import { useUser } from '../context/UserContext';
+import { useStream } from '../context/StreamContext';
 
 import Cookies from 'universal-cookie'
 const cookies = new Cookies();
 
-export const Header = ({ setSelectedStream }) => {
+export const Header = () => {
     const { setUserID, setLoading } = useUser()
+    const { setSelectedStream } = useStream()
 
     const logout = async () => {
         await signOut(auth)

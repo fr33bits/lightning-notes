@@ -1,20 +1,17 @@
 import { Stream } from './Stream.jsx'
 import { NewStream } from './NewStream.jsx'
 
-export const MainView = ({selectedStream, setSelectedStream}) => {
+import { useStream } from '../context/StreamContext.js'
+
+export const MainView = () => {
+    const values = useStream()
+    const selectedStream = values?.selectedStream || null
+
     let view;
     if (selectedStream) {
-        view = (
-            <Stream
-                selectedStream={selectedStream}
-            />
-        )
+        view = <Stream />
     } else {
-        view = (
-            <NewStream
-                setSelectedStream={setSelectedStream}
-            />
-        )
+        view = <NewStream />
     }
     return (
         <div className='main_view'>

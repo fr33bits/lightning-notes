@@ -10,9 +10,9 @@ export const Note = ({message, author}) => {
     //     const fetchSenders = async () => {
     //         const uniqueSenderIDs = []
     //         for (let i = 0; i < messages.length; i++) {
-    //             const sender_id = messages[i].sender_id
-    //             if (!uniqueSenderIDs.includes(sender_id)) {
-    //                 uniqueSenderIDs.push(sender_id)
+    //             const author_id = messages[i].author_id
+    //             if (!uniqueSenderIDs.includes(author_id)) {
+    //                 uniqueSenderIDs.push(author_id)
     //             }
     //         }
 
@@ -48,7 +48,7 @@ export const Note = ({message, author}) => {
                     {/* <div
                         className='note-author-name'
                     >
-                        {getUser(message.sender_id)}
+                        {getUser(message.author_id)}
                     </div> */}
                 </div>
                 <div
