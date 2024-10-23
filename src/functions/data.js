@@ -5,6 +5,12 @@ export function getStreamName(streamName) {
             return "Unsorted"
         case '_inbox':
             return "Inbox"
+        case '_universal_clipboard':
+            return "Universal clipboard"
+        case '_trash':
+            return "Trash"
+        case '_all':
+            return "All"
         default:
             return streamName
     }

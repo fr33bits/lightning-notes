@@ -78,34 +78,16 @@ export const addUser = async (user) => {
 }
 
 export const createReservedStreams = async (user) => {
-    createUnsortedStream(user)
-    createInboxStream(user)
+    createReservedStream(user, "_unsorted")
+    createReservedStream(user, "_inbox")
+    createReservedStream(user, "_universal_clipboard")
 }
 
-export const createUnsortedStream = async (user) => {    
+export const createReservedStream = async (user, reserved_stream_name) => {    
     try {
         const streamData = {
             reserved: true,
-            name: "_unsorted",
-            created_at: serverTimestamp(),
-            created_by: user.id,
-            member_ids: [user.id],
-            admin_ids: [user.id],
-            disabled: false,
-            deleted: false
-        }
-
-        const docRef = await addDoc(streamsRef, streamData)
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-export const createInboxStream = async (user) => {    
-    try {
-        const streamData = {
-            reserved: true,
-            name: "_inbox",
+            name: reserved_stream_name,
             created_at: serverTimestamp(),
             created_by: user.id,
             member_ids: [user.id],
