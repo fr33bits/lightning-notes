@@ -1,4 +1,5 @@
 import './App.css' // somehow styles from other CSS files are also availible
+import './styles/Global.css'
 
 import { Auth } from './components/Auth.jsx'
 import { Loading } from './components/Loading.jsx'

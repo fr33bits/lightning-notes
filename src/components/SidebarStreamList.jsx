@@ -30,7 +30,7 @@ export const StreamList = ({ selectedStream, setSelectedStream }) => {
     }, [user]); // TODO: should really be changed every time a new message queue is created, no?
 
     return (
-        <div className='sidebar-stream-item-list'>
+        <div className='sidebar-stream-list'>
             {streams.map((stream) => (
                 <StreamListItem
                     key={stream.id}

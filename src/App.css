@@ -15,7 +15,7 @@ body,
   margin: 0;
 }
 
-.signedInView {
+.signed_in_view {
   display: flex;
   flex-direction: row;
   height: 100vh;

@@ -1,4 +1,4 @@
-.sidebars {
+.sidebar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,7 +17,7 @@
     padding: 10px;
 }
 
-.sidebar-streamlist {
+.sidebar-top {
     flex: 1;
     margin-bottom: 0;
     /* ? why does the bottom margin of this element not cover up with the margin of the top element even though stream list items behave like that */
@@ -43,23 +43,8 @@
     font-size: 27px;
 }
 
-.sidebar-header-button {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    border-radius: 9999px;
-    cursor: pointer;
-}
-
-.sidebar-header-button:hover {
-    background-color: rgba(255, 255, 255, 0.129);
-}
-
-.sidebar-header-button-icon {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.sidebar-header-buttons {
+    float: right;
 }
 
 .sidebar-stream-item {
@@ -119,7 +104,7 @@
   font-size: 30px;
 }
 
-.sidebar-stream-item-list {
+.sidebar-stream-list {
     flex: 1;
     flex-basis: 0px;
     /* necessary to prevent the element from expanding to accomodat the (total) height of all child divs */
@@ -131,7 +116,7 @@
     /* Hide scrollbar in Firefox */
 }
 
-.sidebar-stream-item-list::-webkit-scrollbar {
+.sidebar-stream-list::-webkit-scrollbar {
     display: none;
     /* Hide scrollbar in Chrome, Safari, and Opera */
 }
@@ -168,12 +153,6 @@
 }
 
 /* SIDEBAR BOTTOM */
-
-.sidebar-bottom-text {
-    overflow: hidden;
-    white-space: nowrap;
-}
-
 .sidebar-bottom {
     display: flex;
     flex-direction: row;
@@ -181,22 +160,49 @@
     height: 45px;
 }
 
-.sidebar-bottom img {
+.user_tile {
+    width: 100%;
+    height: 100%;
+}
+
+.user_tile-info {
+    display: inline-block;
+    height: 100%;
+}
+
+.user_tile-info-pfp {
+    display: inline-block;
+    height: 100%;
+}
+
+.user_tile-info-pfp img {
     margin-right: 10px;
     height: 45px;
 }
 
-.user-name {
+.user_tile-info-text {
+    height: 100%;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.user_tile-info-display_name {
+    height: 50%;
     font-size: medium;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.sidebar-bottom .local-id {
-    border-radius: 5px;
+.user_tile-info-user_id-container{
+    height: 50%;
+}
+.user_tile-info-user_id {
+    /* height: 100%; */
+    border-radius: 7px;
     padding: 5px;
-
+    
     font-size: x-small;
     background-color: #efeeee;
     overflow: hidden;
@@ -204,6 +210,11 @@
     text-overflow: ellipsis;
 }
 
-.sidebar-bottom .local-id:hover {
+.user_tile-info-user_id:hover {
     background-color: rgb(204, 204, 204);
+}
+
+.user_tile-buttons {
+    float: right;
+    margin-right: 2.5px; /* ensures equal spacing from top, button and right */
 }

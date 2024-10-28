@@ -2,12 +2,12 @@ import '../styles/Sidebar.css'
 
 import { Header } from './SidebarHeader.jsx';
 import { StreamList } from './SidebarStreamList.jsx';
-import { Footer } from './SidebarFooter.jsx';
+import { UserTile } from './SidebarUserTile.jsx';
 
 export const Sidebar = ({ selectedStream, setSelectedStream, setShowStreamSettings }) => {
     return (
-        <div className='sidebars'>
-            <div className="sidebar sidebar-streamlist">
+        <div className='sidebar-container'>
+            <div className="sidebar sidebar-top">
                 <Header
                     setSelectedStream={setSelectedStream}
                 />
@@ -16,7 +16,9 @@ export const Sidebar = ({ selectedStream, setSelectedStream, setShowStreamSettin
                     setSelectedStream={setSelectedStream}
                     setShowStreamSettings={setShowStreamSettings}
                 />
-                <Footer />
+            </div>
+            <div className='sidebar sidebar-bottom'>
+                <UserTile/>
             </div>
         </div>
     )

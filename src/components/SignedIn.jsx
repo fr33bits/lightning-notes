@@ -8,10 +8,8 @@ export const SignedIn = () => {
     const [showSettings, setShowSettings] = useState(false)
 
     return (
-        <div className="signedInView">
-            <Sidebar
-                className='sidebar'
-            />
+        <div className="signed_in_view">
+            <Sidebar/>
             <MainView/>
             {showSettings ? <Settings setShowSettings={setShowSettings} /> : null}
         </div >

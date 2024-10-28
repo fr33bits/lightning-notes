@@ -1,0 +1,35 @@
+.buttons-container {
+    height: 100%;
+    display: flex; /* ! can be problematic if another class also wants to impose display: inline-block onto the same element (but generally those shouldn't be needed)*/
+    flex-direction: row; /* removes the need for another div with display: inline-block which is not possible with button-container anyway because it already uses flex*/
+    gap: 5px;
+}
+
+/* Could also experiment with setting the line-height and vertical-align: middle*/
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.button {
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-medium {
+    width: 40px;
+    height: 40px;
+}
+
+.button-hover-light:hover {
+    background-color: rgba(255, 255, 255, 0.129);
+}
+.button-hover-dark:hover {
+    background-color: rgb(218, 218, 218);
+}

@@ -45,7 +45,7 @@ export const NoteComposer = () => {
                         title="Add note"
                         style={{ padding: '0px 12px', fontSize: '25px' }}
                     >
-                        {/* <span class="material-symbols-outlined">add</span> */}
+                        {/* <span className="material-symbols-outlined">add</span> */}
                         +
                     </button>
                 </form>
