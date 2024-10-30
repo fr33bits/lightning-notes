@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/lightning-notes/static/css/main.84abd9fb.css",
-    "main.js": "/lightning-notes/static/js/main.3e0e8145.js",
+    "main.css": "/lightning-notes/static/css/main.c73cb19e.css",
+    "main.js": "/lightning-notes/static/js/main.7bf8d19a.js",
     "index.html": "/lightning-notes/index.html",
-    "main.84abd9fb.css.map": "/lightning-notes/static/css/main.84abd9fb.css.map",
-    "main.3e0e8145.js.map": "/lightning-notes/static/js/main.3e0e8145.js.map"
+    "main.c73cb19e.css.map": "/lightning-notes/static/css/main.c73cb19e.css.map",
+    "main.7bf8d19a.js.map": "/lightning-notes/static/js/main.7bf8d19a.js.map"
   },
   "entrypoints": [
-    "static/css/main.84abd9fb.css",
-    "static/js/main.3e0e8145.js"
+    "static/css/main.c73cb19e.css",
+    "static/js/main.7bf8d19a.js"
   ]
 }
