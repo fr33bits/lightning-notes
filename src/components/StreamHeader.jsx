@@ -3,10 +3,12 @@ import { leaveStream } from '../functions/firebaseCalls.js'
 
 import { useUser } from '../context/UserContext.js'
 import { useStream } from '../context/StreamContext.js'
+import { useView } from '../context/ViewContext.js'
 
 export const StreamHeader = () => {
     const { user } = useUser()
     const { selectedStream, setShowStreamSettings } = useStream()
+    const { toggleSidebar } = useView()
 
     let buttonRight
     if (selectedStream.reserved) {
@@ -48,15 +50,23 @@ export const StreamHeader = () => {
             <div className="header">
                 <div className="stream-header-buttons-left buttons-container">
                     <div className="button-container">
-                        <div className='button button-medium button-hover-dark' title="Toogle sidebar">
+                        <div
+                            className='button button-medium button-hover-dark'
+                            title="Toogle sidebar"
+                            onClick={toggleSidebar}
+                        >
                             <span className="material-symbols-outlined">
                                 view_sidebar
                             </span>
                         </div>
                     </div>
                     <div className="button-container">
-                        <div className='button button-medium button-hover-dark' title="Add user to stream">
-                            <span className="material-symbols-outlined" onClick={() => setShowStreamSettings(true)}>
+                        <div
+                            className='button button-medium button-hover-dark'
+                            title="Add user to stream"
+                            onClick={() => setShowStreamSettings(true)}
+                        >
+                            <span className="material-symbols-outlined">
                                 settings
                             </span>
                         </div>

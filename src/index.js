@@ -5,14 +5,17 @@ import App from './App';
 
 import { UserProvider } from './context/UserContext';
 import { StreamProvider } from './context/StreamContext';
+import { ViewProvider } from './context/ViewContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <UserProvider>
-      <StreamProvider>
-        <App />
-      </StreamProvider>
+      <ViewProvider>
+        <StreamProvider>
+          <App />
+        </StreamProvider>
+      </ViewProvider>
     </UserProvider>
   </React.StrictMode>
 );
