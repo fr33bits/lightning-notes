@@ -4,18 +4,12 @@ import { Header } from './SidebarHeader.jsx';
 import { StreamList } from './SidebarStreamList.jsx';
 import { UserTile } from './SidebarUserTile.jsx';
 
-export const Sidebar = ({ selectedStream, setSelectedStream, setShowStreamSettings }) => {
+export const Sidebar = () => {
     return (
         <div className='sidebar-container'>
             <div className="sidebar sidebar-top">
-                <Header
-                    setSelectedStream={setSelectedStream}
-                />
-                <StreamList
-                    selectedStream={selectedStream}
-                    setSelectedStream={setSelectedStream}
-                    setShowStreamSettings={setShowStreamSettings}
-                />
+                <Header/>
+                <StreamList/>
             </div>
             <div className='sidebar sidebar-bottom'>
                 <UserTile/>

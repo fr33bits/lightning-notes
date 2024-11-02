@@ -1,10 +1,11 @@
 import { signInWithPopup } from 'firebase/auth'
-import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc, arrayRemove, updateDoc } from "firebase/firestore";
+import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc, arrayRemove, updateDoc, orderBy, limit, onSnapshot } from "firebase/firestore";
 
 import { auth, provider, db } from '../firebase-config.js'
 
 const usersRef = collection(db, 'users')
 const streamsRef = collection(db, "streams")
+const notesRef = collection(db, "notes")
 
 export const signInWithGoogle = async () => {
     try {
@@ -24,10 +25,10 @@ export const getUserByAuthID = async (auth_id) => {
     try {
         const q = query(usersRef, where("auth_id", "==", auth_id))
         const querySnapshot = await getDocs(q);
-        
+
         if (!querySnapshot.empty) {
             const user = querySnapshot.docs[0]
-            const userData = {id: user.id, ...user.data()}
+            const userData = { id: user.id, ...user.data() }
             return userData
         } else {
             // console.log("A user with this auth_id does not exist!")
@@ -43,7 +44,7 @@ export const getUser = async (user_id) => {
         const docRef = doc(db, 'users', user_id)
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
-            return {id: docSnap.id, ...docSnap.data()}
+            return { id: docSnap.id, ...docSnap.data() }
         } else {
             // console.log("A user with this ID does not exist!")
             return null;
@@ -69,7 +70,7 @@ export const addUser = async (user) => {
         }
         const docRef = await addDoc(usersRef, userData)
         const docSnap = await getDoc(docRef) // to ensure that in the returned data, created_at is resolved
-        userData = {id: docSnap.id, ...docSnap.data()}
+        userData = { id: docSnap.id, ...docSnap.data() }
         await createReservedStreams(userData)
         return userData;
     } catch (err) {
@@ -83,7 +84,7 @@ export const createReservedStreams = async (user) => {
     createReservedStream(user, "_universal_clipboard")
 }
 
-export const createReservedStream = async (user, reserved_stream_name) => {    
+export const createReservedStream = async (user, reserved_stream_name) => {
     try {
         const streamData = {
             reserved: true,
@@ -100,6 +101,31 @@ export const createReservedStream = async (user, reserved_stream_name) => {
     } catch (err) {
         console.error(err)
     }
+}
+
+export const lastNoteInStream = async (stream_id, setLastNote) => {
+    const queryNoteList = query(
+        notesRef,
+        where("stream_id", "==", stream_id),
+        orderBy('created_at', "desc"),
+        limit(1)
+    )
+
+    const unsubscribe = onSnapshot(queryNoteList, async (snapshot) => {
+        let queriedNotes = []
+        snapshot.forEach((doc) => {
+            queriedNotes.push({ ...doc.data(), id: doc.id })
+        })
+        if (queriedNotes.length > 0) {
+            let queriedLastNote = queriedNotes[0]
+            let queriedLastNoteAuthor = await getUser(queriedLastNote.author_id)
+            setLastNote({...queriedLastNote, author: queriedLastNoteAuthor})
+        } else {
+            setLastNote(null)
+        }
+    })
+
+    return () => unsubscribe()
 }
 
 export const leaveStream = async (stream, user_id) => {

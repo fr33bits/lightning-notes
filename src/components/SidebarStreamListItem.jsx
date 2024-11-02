@@ -1,87 +1,35 @@
 import { useState, useEffect } from "react"
-import { collection, query, where, getDocs, orderBy, limit, onSnapshot } from "firebase/firestore"
-
+import { query, where, orderBy, limit, onSnapshot, collection } from "firebase/firestore"
 import { db } from "../firebase-config"
+
 import { getStreamName } from "../functions/data"
+import { lastNoteInStream, getUser } from "../functions/firebaseCalls"
 
 import { useUser } from "../context/UserContext"
 import { useStream } from "../context/StreamContext"
 
-const StreamIcon = ({ reserved_stream, stream_name, stream_icon_uri, group_stream }) => {
-    let icon
-    if (reserved_stream) {
-        if (stream_name === '_unsorted') {
-            icon = <span className="material-symbols-outlined group-icon-google">scatter_plot</span>
-        } else if (stream_name === '_inbox') {
-            icon = <span className="material-symbols-outlined group-icon-google">inbox</span>
-        } else if (stream_name === '_all') {
-            icon = <span className="material-symbols-outlined group-icon-google">all_inbox</span>
-        } else if (stream_name === '_universal_clipboard') {
-            icon = <span className="material-symbols-outlined group-icon-google">content_paste</span>
-        } else if (stream_name === '_trash') {
-            icon = <span className="material-symbols-outlined group-icon-google">delete</span>
-        }
-    } else if (stream_icon_uri) {
-        icon = <img src={stream_icon_uri} className='sidebar-stream-item-icon' />
-    } else if (group_stream) {
-        icon = <span className="material-symbols-outlined group-icon-google">groups</span>
-    } else {
-        icon = <span className="material-symbols-outlined group-icon-google">folder</span>
-    }
+import { StreamIcon } from "./StreamIcon"
 
-    return (
-        <div className='stream-icon-container'>
-            {icon}
-        </div>
-    )
-}
+const notesRef = collection(db, "notes")
 
-export const StreamListItem = ({ stream }) => {
+export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStreamName }) => {
     const values = useStream()
     const selectedStream = values?.selectedStream || null
     const setSelectedStream = values.setSelectedStream
     const { user } = useUser();
 
-    const [lastMessage, setLastMessage] = useState(null)
-    const [lastMessageUser, setLastMessageUser] = useState(null)
+    const [lastNote, setLastNote] = useState(null)
 
     useEffect(() => {
-        if (lastMessage) {
-            const usersRef = collection(db, 'users')
-            const getUser = async () => {
-                const q = query(usersRef, where("id", "==", user.id))
-                const querySnapshot = await getDocs(q);
-                const users = querySnapshot.docs.map(doc => doc.data());
-                setLastMessageUser(users[0]);
-            }
-            getUser(lastMessage.author_id)
+        if (!pseudoStream) {
+            // console.log("TRIGGERERD!")
+            lastNoteInStream(stream.id, setLastNote)
         }
-    }, [lastMessage])
+    }, [stream]); // ! removed [stream]
 
-    useEffect(() => {
-        const getLastMessage = async () => {
-
-            const messagesRef = collection(db, "messages")
-            const queryMessagesList = query(
-                messagesRef,
-                where("stream_id", "==", stream.id),
-                orderBy('created_at', "desc"),
-                limit(1)
-            )
-
-            const unsubscribe = onSnapshot(queryMessagesList, async (snapshot) => {
-                let queriedMessages = []
-                snapshot.forEach((doc) => {
-                    queriedMessages.push({ ...doc.data(), id: doc.id })
-                })
-                let queriedLastMessage = queriedMessages[0]
-                setLastMessage(queriedLastMessage)
-            })
-
-            return () => unsubscribe()
-        }
-        getLastMessage()
-    }, [stream]);
+    // useEffect(() => {
+    //     console.log("lastNote: ", lastNote)
+    // }, [lastNote])
 
     const selectStream = () => {
         setSelectedStream(stream);
@@ -91,23 +39,23 @@ export const StreamListItem = ({ stream }) => {
         <div className='sidebar-stream-item' onClick={selectStream}>
             <div className='sidebar-stream-item-icon-container'>
                 <StreamIcon
-                    reserved_stream={stream.reserved}
-                    stream_name={stream.name}
-                    stream_icon_uri={stream.icon_uri}
-                    group_stream={stream.member_ids > 1}
+                    reserved_stream={reservedStream}
+                    stream_name={pseudoStreamName ?? stream.name}
+                    stream_icon_uri={stream?.icon_uri}
+                    group_stream={stream?.member_ids > 1}
                 />
             </div>
             <div className='sidebar-stream-item-text'>
-                <div className='sidebar-stream-item-header' title={"Stream ID: " + stream.id}>
-                    {getStreamName(stream.name)}
+                <div className='sidebar-stream-item-header' title={"Stream ID: " + stream?.id}>
+                    {getStreamName(pseudoStreamName ?? stream.name)}
                 </div>
-                {lastMessageUser?.name ?
-                    <div className='sidebar-stream-item-last-message'>
-                        {lastMessageUser?.id === user.id ?
-                            'You' :
-                            lastMessageUser?.name.split(' ')[0]
+                {lastNote ?
+                    <div className='sidebar-stream-item-last-note'>
+                        {lastNote?.author?.id === user.id ?
+                            null :
+                            lastNote?.author?.name.split(' ')[0] + ": "
                         }
-                        : {lastMessage?.text}
+                        {lastNote?.text}
                     </div>
                     : null
                 }

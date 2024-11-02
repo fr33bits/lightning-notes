@@ -15,13 +15,13 @@ function App() {
   
   let view
   if (loading) {
-    console.log("APP: loading...")
+    // console.log("APP: loading...")
     view = <Loading/>;
   } else if (!user) {
-    console.log("APP: UserContext not set")
+    // console.log("APP: UserContext not set")
     view = <Auth/>
   } else {
-    console.log("APP: UserContext set", user)
+    // console.log("APP: UserContext set", user)
     view = <SignedIn/>
   }
 

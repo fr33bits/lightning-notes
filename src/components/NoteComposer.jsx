@@ -5,38 +5,38 @@ import { db } from '../firebase-config'
 import { useUser } from '../context/UserContext'
 import { useStream } from '../context/StreamContext'
 
-const messagesRef = collection(db, 'messages')
+const notesRef = collection(db, 'notes')
 
 export const NoteComposer = () => {
     const { user } = useUser()
     const values = useStream()
     const selectedStream = values?.selectedStream || null
 
-    const [newMessage, setNewMessage] = useState("")
+    const [newNote, setNewNote] = useState("")
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        if (newMessage === "") {
+        if (newNote === "") {
             return
         } else {
-            await addDoc(messagesRef, {
-                text: newMessage,
+            await addDoc(notesRef, {
+                text: newNote,
                 created_at: serverTimestamp(),
                 author_id: user.id,
                 stream_id: selectedStream.id
             })
-            setNewMessage("")
+            setNewNote("")
         }
     }
 
     return (
-        <div className='new-message-form-container-background'>
-            <div className='new-message-form-container'>
-                <form onSubmit={handleSubmit} className="new-message-form">
+        <div className='new-note-form-container-background'>
+            <div className='new-note-form-container'>
+                <form onSubmit={handleSubmit} className="new-note-form">
                     <input
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        value={newMessage}
-                        className="new-message-input"
+                        onChange={(e) => setNewNote(e.target.value)}
+                        value={newNote}
+                        className="new-note-input"
                         placeholder="Type a note..."
                     />
                     <button

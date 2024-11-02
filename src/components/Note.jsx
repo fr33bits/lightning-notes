@@ -1,7 +1,7 @@
 import { getDate } from '../functions/data'
 import { getUser } from '../functions/firebaseCalls'
 
-export const Note = ({message, author}) => {
+export const Note = ({note, author}) => {
     const { format } = require('date-fns');
 
     // USER DATA
@@ -9,8 +9,8 @@ export const Note = ({message, author}) => {
     // useEffect(() => {
     //     const fetchSenders = async () => {
     //         const uniqueSenderIDs = []
-    //         for (let i = 0; i < messages.length; i++) {
-    //             const author_id = messages[i].author_id
+    //         for (let i = 0; i < notes.length; i++) {
+    //             const author_id = notes[i].author_id
     //             if (!uniqueSenderIDs.includes(author_id)) {
     //                 uniqueSenderIDs.push(author_id)
     //             }
@@ -33,13 +33,13 @@ export const Note = ({message, author}) => {
     //     }
 
     //     fetchSenders()
-    // }, [messages])
+    // }, [notes])
 
     return (
-        <div className='message-row'>
+        <div className='note-row'>
             <div
-                id={message.id}
-                key={message.id}
+                id={note.id}
+                key={note.id}
             >
                 <div className='note-metadata-row'>
                     <div className='note-timestamp'>
@@ -48,20 +48,20 @@ export const Note = ({message, author}) => {
                     {/* <div
                         className='note-author-name'
                     >
-                        {getUser(message.author_id)}
+                        {getUser(note.author_id)}
                     </div> */}
                 </div>
                 <div
-                    className='message-text'
-                    title={'Message ID: ' + message.id
-                        + '\n' + getDate(message.created_at)
+                    className='note-text'
+                    title={'Note ID: ' + note.id
+                        + '\n' + getDate(note.created_at)
                     }
                 >
-                    {/* Style needed to push the message text to the right even though the parent div is already pushed to the right */}
-                    {message.text}
+                    {/* Style needed to push the note text to the right even though the parent div is already pushed to the right */}
+                    {note.text}
                 </div>
-                {/* <div className='message-timestamp'>
-                        {message?.created_at?.seconds ? getDate(message.created_at.seconds) : null}
+                {/* <div className='note-timestamp'>
+                        {note?.created_at?.seconds ? getDate(note.created_at.seconds) : null}
                     </div> */}
             </div>
         </div>

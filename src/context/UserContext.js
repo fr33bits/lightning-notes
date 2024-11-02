@@ -35,13 +35,13 @@ export const UserProvider = ({ children }) => {
     // IMPLEMENTATION 2: users stream; this is what is actually used since the users stream holds the relevant data
     useEffect(() => {
         if (!userID) {
-            console.log("CONTEXT: User ID not set")
+            // console.log("CONTEXT: User ID not set")
             setLoading(false)
             setUser(null)
             return // the user is not set
-        }
+        } // TODO: else?
 
-        console.log("CONTEXT: User ID set")
+        // console.log("CONTEXT: User ID set")
         const userRef = doc(db, 'users', userID)
         const unsubscribe = onSnapshot(userRef,
             (snapshot) => {

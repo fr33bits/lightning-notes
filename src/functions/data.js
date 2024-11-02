@@ -21,3 +21,11 @@ export function getDate(firestore_timestamp) {
     const javascriptDate = new Date(milliseconds);
     return javascriptDate
 }
+
+export function separateStreams(streams) {
+    const queriedUserDefinedStreams = streams.filter(stream => !stream.reserved)
+    const queriedInboxStream = streams.find(stream => stream.name === "_inbox")
+    const queriedUnsortedStream = streams.find(stream => stream.name === "_unsorted")
+    const queriedUniversalClipboardStream = streams.find(stream => stream.name === "_universal_clipboard")
+    return { queriedUserDefinedStreams, queriedInboxStream, queriedUnsortedStream, queriedUniversalClipboardStream }
+}

@@ -3,7 +3,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative; /* needed to make sure that the new-message-form-container has the (100%) width of this element and not the entire viewport */
+    position: relative; /* needed to make sure that the new-note-form-container has the (100%) width of this element and not the entire viewport */
 }
 
 /* TODO: does this even do anything? */
@@ -56,16 +56,16 @@
     text-overflow: ellipsis;
 }
 
-/* MESSAGES */
+/*  NOTES */
 
-.messages-container {
+.notes-container {
     flex: 1;
     overflow-y: scroll;
-    padding-bottom: 60px; /* adjustment for floating message form */
+    padding-bottom: 60px; /* adjustment for floating note form */
     /* TODO: doesn't seem like there's an easy way to fix the scrollbar being hidden behind the form; could use the perfect-scrollbar library */
 }
 
-.messages {
+.notes {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -73,12 +73,12 @@
     padding: 20px 20px 0px 20px;
 }
 
-.message-row {
+.note-row {
     width: 100%;
     margin-bottom: 10px;
 }
 
-.message {
+.note {
     width: 100%;
 }
 
@@ -96,7 +96,7 @@
     float:right;
 }
 
-.message-text {
+.note-text {
     background-color: #ffffff;
     color: black;
     border-radius: 15px;
@@ -107,12 +107,12 @@
     box-shadow: 0px 0px 12px 10px rgb(234, 234, 234);
 }
 
-.message-timestamp {
+.note-timestamp {
     font-size:x-small
 }
 
 
-.new-message-form-container-background {
+.new-note-form-container-background {
     display: block;
     height: 60px;
     width: 100%;
@@ -133,7 +133,7 @@
     }
 }
 
-.new-message-form-container {
+.new-note-form-container {
     display: block;
     height: 60px;
     width: 100%;
@@ -143,7 +143,7 @@
     z-index: 8;
 }
 
-.new-message-form {
+.new-note-form {
     display: flex;
     margin: 10px;
     width: auto;
@@ -152,7 +152,7 @@
     border-radius: 15px;
 }
 
-.new-message-input {
+.new-note-input {
     flex: 1;
     border: none;
     outline: none;

@@ -18,7 +18,7 @@ export const StreamHeader = () => {
                     className="material-symbols-outlined"
                     onClick={() => leaveStream(selectedStream, user.id)}
                 >
-                    hide
+                    hide_source
                 </span>
             </div>
         )
@@ -78,7 +78,7 @@ export const StreamHeader = () => {
                         {buttonRight}
                     </div>
                     <div className='button-container'>
-                        <div className="button button-medium button-hover-dark" title="Delete all messages in the stream">
+                        <div className="button button-medium button-hover-dark" title="Delete all notes in the stream">
                             <span
                                 className="material-symbols-outlined"
                             >

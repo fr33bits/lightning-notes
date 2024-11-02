@@ -10,46 +10,46 @@ import { useStream } from '../context/StreamContext.js'
 export const StreamNotes = () => {
     const { selectedStream } = useStream()
 
-    const messagesRef = collection(db, 'messages')
-    const [messages, setMessages] = useState([])
+    const notesRef = collection(db, 'notes')
+    const [notes, setNotes] = useState([])
 
-    const messagesEndRef = useRef(null)
+    const notesEndRef = useRef(null)
 
     useEffect(() => {
         const queryStreamMesssages = query(
-            messagesRef,
+            notesRef,
             where("stream_id", "==", selectedStream.id),
             orderBy('created_at')
         )
         const unsubscribe = onSnapshot(queryStreamMesssages, (snapshot) => {
-            let queriedMessages = []
+            let queriedNotes = []
             snapshot.forEach((doc) => {
-                queriedMessages.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
+                queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
             })
-            setMessages(queriedMessages)
+            setNotes(queriedNotes)
         })
 
         return () => unsubscribe() // TODO: poglej, zakaj je to pomembno
     }, [selectedStream])
 
     useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        if (notesEndRef.current) {
+            notesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [messages]);
+    }, [notes]);
 
     return (
-        <div className='messages-container'>
-            <div className='messages'>
-                {messages.map((message, index) => (
+        <div className='notes-container'>
+            <div className='notes'>
+                {notes.map((note, index) => (
                     <Note
                         key={index}
-                        message={message}
+                        note={note}
                         index={index}
-                        author={getUser(message.author_id)}
+                        author={getUser(note.author_id)}
                     />
                 ))}
-                <div ref={messagesEndRef}></div>
+                <div ref={notesEndRef}></div>
             </div>
         </div>
     )
