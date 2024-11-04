@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react"
-import { query, where, orderBy, limit, onSnapshot, collection } from "firebase/firestore"
-import { db } from "../firebase-config"
 
 import { getStreamName } from "../functions/data"
 import { lastNoteInStream, getUser } from "../functions/firebaseCalls"
@@ -9,8 +7,6 @@ import { useUser } from "../context/UserContext"
 import { useStream } from "../context/StreamContext"
 
 import { StreamIcon } from "./StreamIcon"
-
-const notesRef = collection(db, "notes")
 
 export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStreamName }) => {
     const values = useStream()
@@ -22,14 +18,9 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
 
     useEffect(() => {
         if (!pseudoStream) {
-            // console.log("TRIGGERERD!")
             lastNoteInStream(stream.id, setLastNote)
         }
-    }, [stream]); // ! removed [stream]
-
-    // useEffect(() => {
-    //     console.log("lastNote: ", lastNote)
-    // }, [lastNote])
+    }, []);
 
     const selectStream = () => {
         setSelectedStream(stream);

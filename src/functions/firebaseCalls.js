@@ -3,6 +3,8 @@ import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc
 
 import { auth, provider, db } from '../firebase-config.js'
 
+import { separateStreams } from './data.js'
+
 const usersRef = collection(db, 'users')
 const streamsRef = collection(db, "streams")
 const notesRef = collection(db, "notes")
@@ -103,6 +105,29 @@ export const createReservedStream = async (user, reserved_stream_name) => {
     }
 }
 
+export const getUserStreams = (user_id, setStreamListLoading, setUserDefinedStreams, setInboxStream, setUnsortedStream, setUniversalClipboardStream) => {
+    const queryStreamList = query(
+        streamsRef,
+        where("member_ids", "array-contains", user_id),
+    )
+
+    const unsubscribe = onSnapshot(queryStreamList, (snapshot) => {
+        let queriedStreams = []
+        snapshot.forEach((doc) => {
+            queriedStreams.push({ ...doc.data(), id: doc.id })
+        })
+
+        const { queriedUserDefinedStreams, queriedInboxStream, queriedUnsortedStream, queriedUniversalClipboardStream } = separateStreams(queriedStreams)
+        setUserDefinedStreams(queriedUserDefinedStreams)
+        setInboxStream(queriedInboxStream)
+        setUnsortedStream(queriedUnsortedStream)
+        setUniversalClipboardStream(queriedUniversalClipboardStream)
+        setStreamListLoading(false)
+    })
+
+    return () => unsubscribe()
+}
+
 export const lastNoteInStream = async (stream_id, setLastNote) => {
     const queryNoteList = query(
         notesRef,
@@ -119,7 +144,7 @@ export const lastNoteInStream = async (stream_id, setLastNote) => {
         if (queriedNotes.length > 0) {
             let queriedLastNote = queriedNotes[0]
             let queriedLastNoteAuthor = await getUser(queriedLastNote.author_id)
-            setLastNote({...queriedLastNote, author: queriedLastNoteAuthor})
+            setLastNote({ ...queriedLastNote, author: queriedLastNoteAuthor })
         } else {
             setLastNote(null)
         }
