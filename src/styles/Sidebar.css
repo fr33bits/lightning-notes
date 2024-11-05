@@ -47,33 +47,6 @@
     float: right;
 }
 
-.sidebar-stream-item {
-    margin: 10px;
-    height: 50px;
-    border-radius: 8px;
-    padding: 10px;
-
-    /* needed to prevent text overflowing but doesn't require a flex: 1 on the sidebar-stream-item-text */
-    display: flex;
-    flex-direction: row;
-}
-
-.sidebar-stream-item:hover {
-    background-color: rgb(240, 240, 240);
-}
-
-.sidebar-stream-item-icon-container {
-    display: inline-block;
-    height: 50px;
-    width: 50px;
-}
-
-.sidebar-stream-item-icon {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-}
-
 .stream-icon-container {
     width: 50px;
     /* used to be 100% but then that would sequeeze the group icon, so I set a fixed size */
@@ -119,37 +92,6 @@
 .sidebar-stream-list::-webkit-scrollbar {
     display: none;
     /* Hide scrollbar in Chrome, Safari, and Opera */
-}
-
-.sidebar-stream-item-text {
-    display: inline-block;
-    height: 50px;
-    margin-left: 10px;
-    vertical-align: bottom;
-    /* makes sure the divs are in alignment! */
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.sidebar-stream-item-header {
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.sidebar-stream-item-header-id {
-    margin-left: 10px;
-    color: rgb(122, 122, 122);
-    font-size: 10px;
-}
-
-.sidebar-stream-item-last-note {
-    font-size: medium;
-    color: grey;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 /* SIDEBAR BOTTOM */

@@ -13,7 +13,7 @@ export const StreamIcon = ({ reserved_stream, stream_name, stream_icon_uri, grou
             icon = <span className="material-symbols-outlined group-icon-google">delete</span>
         }
     } else if (stream_icon_uri) {
-        icon = <img src={stream_icon_uri} className='sidebar-stream-item-icon' />
+        icon = <img src={stream_icon_uri} className='sidebar-stream_list-item-icon' />
     } else if (group_stream) {
         icon = <span className="material-symbols-outlined group-icon-google">groups</span>
     } else {

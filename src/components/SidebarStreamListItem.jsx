@@ -8,6 +8,8 @@ import { useStream } from "../context/StreamContext"
 
 import { StreamIcon } from "./StreamIcon"
 
+import '../styles/SidebarStreamListItem.css'
+
 export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStreamName }) => {
     const values = useStream()
     const selectedStream = values?.selectedStream || null
@@ -27,8 +29,8 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
     }
 
     return (
-        <div className='sidebar-stream-item' onClick={selectStream}>
-            <div className='sidebar-stream-item-icon-container'>
+        <div className='sidebar-stream_list-item' onClick={selectStream}>
+            <div className='sidebar-stream_list-item-icon-container'>
                 <StreamIcon
                     reserved_stream={reservedStream}
                     stream_name={pseudoStreamName ?? stream.name}
@@ -36,12 +38,12 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
                     group_stream={stream?.member_ids > 1}
                 />
             </div>
-            <div className='sidebar-stream-item-text'>
-                <div className='sidebar-stream-item-header' title={"Stream ID: " + stream?.id}>
+            <div className='sidebar-stream_list-item-text'>
+                <div className='sidebar-stream_list-item-header' title={stream?.id ? "Stream ID: " + stream.id : null}>
                     {getStreamName(pseudoStreamName ?? stream.name)}
                 </div>
                 {lastNote ?
-                    <div className='sidebar-stream-item-last-note'>
+                    <div className='sidebar-stream_list-item-last-note'>
                         {lastNote?.author?.id === user.id ?
                             null :
                             lastNote?.author?.name.split(' ')[0] + ": "
