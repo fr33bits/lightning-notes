@@ -29,7 +29,10 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
     }
 
     return (
-        <div className='sidebar-stream_list-item' onClick={selectStream}>
+        <div
+            className={`sidebar-stream_list-item ${selectedStream && selectedStream.id === stream?.id ? 'sidebar-stream_list-item-selected' : ''}`}
+            onClick={selectStream}
+        >
             <div className='sidebar-stream_list-item-icon-container'>
                 <StreamIcon
                     reserved_stream={reservedStream}

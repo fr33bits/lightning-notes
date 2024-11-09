@@ -1,0 +1,29 @@
+.stream-icon-container {
+    width: 50px;
+    /* used to be 100% but then that would sequeeze the group icon, so I set a fixed size */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 50%;
+
+    /* Removed because it adds too much visual complexity when icons would otherwise not be circular anyway*/
+    /* background-color: rgb(215, 215, 215); */
+}
+
+.sidebar-stream_list-item-custom-icon {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+/* TODO: not sure what group-icon-google is exactly */
+.material-symbols-outlined.group-icon-google {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    font-size: 30px;
+}
