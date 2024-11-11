@@ -16,7 +16,6 @@ export const StreamHeader = () => {
             <div className="button button-medium button-hover-dark" title="Hide stream">
                 <span
                     className="material-symbols-outlined"
-                    onClick={() => leaveStream(selectedStream, user.id)}
                 >
                     hide_source
                 </span>

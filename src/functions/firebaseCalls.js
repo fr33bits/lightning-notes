@@ -128,6 +128,59 @@ export const getUserStreams = (user_id, setStreamListLoading, setUserDefinedStre
     return () => unsubscribe()
 }
 
+export const getStreamNotes = (stream_id, setNotes) => {
+    const queryStreamNotes = query(
+        notesRef,
+        where("stream_id", "==", stream_id),
+        orderBy('created_at')
+    )
+    const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
+        let queriedNotes = []
+        snapshot.forEach((doc) => {
+            queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
+        })
+        setNotes(queriedNotes)
+    })
+
+    return () => unsubscribe()
+}
+
+export const getAllUserNotes = (user_id, setNotes) => {
+    const queryStreamNotes = query(
+        notesRef,
+        where("author_id", "==", user_id),
+        orderBy('created_at')
+    )
+    const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
+        let queriedNotes = []
+        snapshot.forEach((doc) => {
+            queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
+        })
+        console.log(queriedNotes)
+        setNotes(queriedNotes)
+    })
+
+    return () => unsubscribe()
+}
+
+export const getAllUserDeletedNotes = (user_id, setNotes) => {
+    const queryStreamNotes = query(
+        notesRef,
+        where("author_id", "==", user_id),
+        where("deleted", "==", true),
+        orderBy('created_at')
+    )
+    const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
+        let queriedNotes = []
+        snapshot.forEach((doc) => {
+            queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
+        })
+        setNotes(queriedNotes)
+    })
+
+    return () => unsubscribe()
+}
+
 export const lastNoteInStream = async (stream_id, setLastNote) => {
     const queryNoteList = query(
         notesRef,

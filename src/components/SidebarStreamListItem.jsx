@@ -25,12 +25,16 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
     }, []);
 
     const selectStream = () => {
-        setSelectedStream(stream);
+        setSelectedStream(stream ?? { name: pseudoStreamName, reserved: true, pseudo: true});
     }
 
     return (
         <div
-            className={`sidebar-stream_list-item ${selectedStream && selectedStream.id === stream?.id ? 'sidebar-stream_list-item-selected' : ''}`}
+            className={`sidebar-stream_list-item ${
+                selectedStream &&
+                ((!selectedStream.pseudo && selectedStream.id === stream?.id) || 
+                (selectedStream.pseudo && selectedStream.name === pseudoStreamName)) ?
+                'sidebar-stream_list-item-selected' : ''}`}
             onClick={selectStream}
         >
             <div className='sidebar-stream_list-item-icon-container'>

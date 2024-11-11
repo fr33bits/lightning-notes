@@ -1,35 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore'
-import { getUser } from '../functions/firebaseCalls.js'
-import { db } from '../firebase-config.js'
+import { getStreamNotes, getUser, getAllUserNotes, getAllUserDeletedNotes } from '../functions/firebaseCalls.js'
 
 import { Note } from './Note.jsx'
 
 import { useStream } from '../context/StreamContext.js'
+import { useUser } from '../context/UserContext.js'
 
 export const StreamNotes = () => {
     const { selectedStream } = useStream()
-
-    const notesRef = collection(db, 'notes')
+    const { user } = useUser()
     const [notes, setNotes] = useState([])
 
     const notesEndRef = useRef(null)
 
     useEffect(() => {
-        const queryStreamMesssages = query(
-            notesRef,
-            where("stream_id", "==", selectedStream.id),
-            orderBy('created_at')
-        )
-        const unsubscribe = onSnapshot(queryStreamMesssages, (snapshot) => {
-            let queriedNotes = []
-            snapshot.forEach((doc) => {
-                queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
-            })
-            setNotes(queriedNotes)
-        })
-
-        return () => unsubscribe() // TODO: poglej, zakaj je to pomembno
+        if (!selectedStream.pseudo) {
+            getStreamNotes(selectedStream.id, setNotes)
+        } else if (selectedStream.name === "_all") {
+            getAllUserNotes(user.id, setNotes)
+        } else if (selectedStream.name === "_trash") {
+            getAllUserDeletedNotes(user.id, setNotes)
+        }
     }, [selectedStream])
 
     useEffect(() => {
