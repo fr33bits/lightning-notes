@@ -8,7 +8,7 @@ import '../styles/Stream.css'
 import { useStream } from '../context/StreamContext.js'
 
 export const Stream = () => {
-    const {showStreamSettings} = useStream()
+    const { selectedStream, showStreamSettings } = useStream()
 
     return (
         <div className="stream">
@@ -18,9 +18,9 @@ export const Stream = () => {
                 /> :
                 null
             }
-            <StreamHeader/>
-            <StreamNotes/>
-            <NoteComposer/>
+            <StreamHeader />
+            <StreamNotes />
+            {!selectedStream.pseudo ? <NoteComposer /> : null}
         </div>
     )
 }
