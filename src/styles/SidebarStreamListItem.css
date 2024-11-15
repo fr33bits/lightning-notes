@@ -1,6 +1,5 @@
 .sidebar-stream_list-item {
     margin: 10px;
-    height: 50px;
     border-radius: 8px;
     padding: 10px;
 
@@ -15,8 +14,8 @@
 
 .sidebar-stream_list-item-icon-container {
     display: inline-block;
-    height: 50px;
-    width: 50px;
+    height: 100%;
+    /* the width need not be set */
 }
 
 .sidebar-stream_list-item-selected {
@@ -32,7 +31,7 @@
     flex-direction: column;
     justify-content: center;
 
-    height: 50px;
+    height: 100%;
     margin-left: 10px;
 
     white-space: nowrap;

@@ -18,8 +18,7 @@
     border-radius: 50%;
 }
 
-/* TODO: not sure what group-icon-google is exactly */
-.material-symbols-outlined.group-icon-google {
+.material-symbols-outlined.icon-filled {
     font-variation-settings:
         'FILL' 1,
         'wght' 400,

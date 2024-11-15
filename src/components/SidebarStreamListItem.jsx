@@ -5,6 +5,7 @@ import { lastNoteInStream, getUser } from "../functions/firebaseCalls"
 
 import { useUser } from "../context/UserContext"
 import { useStream } from "../context/StreamContext"
+import { useView } from "../context/ViewContext"
 
 import { StreamIcon } from "./StreamIcon"
 
@@ -15,6 +16,7 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
     const selectedStream = values?.selectedStream || null
     const setSelectedStream = values.setSelectedStream
     const { user } = useUser();
+    const { compactStreamListItem } = useView();
 
     const [lastNote, setLastNote] = useState(null)
 
@@ -25,16 +27,17 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
     }, []);
 
     const selectStream = () => {
-        setSelectedStream(stream ?? { name: pseudoStreamName, reserved: true, pseudo: true});
+        setSelectedStream(stream ?? { name: pseudoStreamName, reserved: true, pseudo: true });
     }
 
     return (
         <div
-            className={`sidebar-stream_list-item ${
-                selectedStream &&
-                ((!selectedStream.pseudo && selectedStream.id === stream?.id) || 
-                (selectedStream.pseudo && selectedStream.name === pseudoStreamName)) ?
-                'sidebar-stream_list-item-selected' : ''}`}
+            className={`sidebar-stream_list-item
+                    ${selectedStream &&
+                        ((!selectedStream.pseudo && selectedStream.id === stream?.id) ||
+                        (selectedStream.pseudo && selectedStream.name === pseudoStreamName)) ?
+                    'sidebar-stream_list-item-selected' : ''}`}
+            style={{height: compactStreamListItem ? '25px' : '50px'}}
             onClick={selectStream}
         >
             <div className='sidebar-stream_list-item-icon-container'>
@@ -49,7 +52,7 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
                 <div className='sidebar-stream_list-item-header' title={stream?.id ? "Stream ID: " + stream.id : null}>
                     {getStreamName(pseudoStreamName ?? stream.name)}
                 </div>
-                {lastNote ?
+                {lastNote && !compactStreamListItem ?
                     <div className='sidebar-stream_list-item-last-note'>
                         {lastNote?.author?.id === user.id ?
                             null :

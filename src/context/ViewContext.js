@@ -4,6 +4,7 @@ const ViewContext = createContext(null)
 
 export const ViewProvider = ({ children }) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(true)
+    const [compactStreamListItem, setCompactStreamListItem] = useState(true)
 
     const toggleSidebar = () => {
         setIsSidebarVisible((prev) => !prev)
@@ -12,7 +13,9 @@ export const ViewProvider = ({ children }) => {
     let values = {
         isSidebarVisible,
         setIsSidebarVisible,
-        toggleSidebar
+        toggleSidebar,
+        compactStreamListItem,
+        setCompactStreamListItem
     }
 
     return (
