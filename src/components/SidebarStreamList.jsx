@@ -58,6 +58,8 @@ export const StreamList = () => {
                     key={"_id_trash"}
                     pseudoStreamName={"_trash"}
                 />
+                <div className='reserved-user_defined-separator'>
+                </div>
                 {/* USER DEFINED STREAMS */}
                 {userDefinedStreams?.map((userDefinedStream) => (
                     <StreamListItem

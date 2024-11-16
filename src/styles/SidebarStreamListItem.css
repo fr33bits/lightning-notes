@@ -52,3 +52,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.reserved-user_defined-separator {
+    margin: 0 10px;
+    width: 90%;
+    height: 3px;
+    background-color: rgb(180, 180, 180);
+}
