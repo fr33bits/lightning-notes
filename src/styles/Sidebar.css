@@ -120,6 +120,8 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    
+    cursor: pointer;
 }
 
 .user_tile-info-user_id:hover {

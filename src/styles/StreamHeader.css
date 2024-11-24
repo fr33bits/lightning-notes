@@ -1,0 +1,74 @@
+.header-background {
+    height: 70px;
+    position: absolute;
+    top: 0;
+    left: -10px;
+    right: 0;
+    z-index: 7; /* this is why a separate background element is needed, since the z-index would otherwise not be effective inside an &:before */
+
+    content: '';
+    position: absolute;
+    backdrop-filter: blur(5px);
+    mask: linear-gradient(black 75%, transparent);
+    -webkit-mask: linear-gradient(black 75%, transparent);
+}
+
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; /* cannot be left out */
+    height: 50px;
+
+    margin: 0 10px;
+    padding: 0 10px;
+    
+    z-index: 8;
+    background-color: #ffffff;
+    border-radius: 0 0 15px 15px;
+
+    box-shadow: 0px 0px 12px 10px rgb(234, 234, 234);
+}
+
+.header-inner {
+    height: 100%;
+}
+
+.stream-header-buttons-left {
+    float: left;
+}
+
+.stream-header-buttons-right {
+    float: right;
+}
+
+.stream-header-name-icon-container {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    
+    /* Centering inside the parent div */
+    position: absolute;
+    left: 150px;
+    right: 150px;
+    
+    /* Overflow control */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.stream-header-icon-container {
+    display: inline-block;
+    height: 100%;
+    vertical-align: top; /* ! necessary as the position will change if the stream name is present (for some reason); the goal is for the two elements to be independent */
+}
+
+.stream-header-name {
+    display: flex;
+    align-items:center;
+    height: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,16 @@
+.notes-container {
+    width: 100%;
+    flex: 1; /* TODO: why not height: 100? */
+    overflow-y: scroll;
+    padding-top: 60px; /* adjustment for header */
+    padding-bottom: 60px; /* adjustment for floating note form */
+    /* TODO: doesn't seem like there's an easy way to fix the scrollbar being hidden behind the form; could use the perfect-scrollbar library */
+}
+
+.notes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: auto;
+    padding: 20px 20px 0px 20px;
+}

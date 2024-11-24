@@ -27,7 +27,8 @@ export const StreamListItem = ({ stream, reservedStream, pseudoStream, pseudoStr
     }, []);
 
     const selectStream = () => {
-        setSelectedStream(stream ?? { name: pseudoStreamName, reserved: true, pseudo: true });
+        // Need to make sure that selecting a regular stream after a pseudo stream, the relevant characteristics are reset
+        setSelectedStream({...stream, name: pseudoStreamName ?? stream.name, reserved: reservedStream, pseudo: pseudoStream });
     }
 
     return (

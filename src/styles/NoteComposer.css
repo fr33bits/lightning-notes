@@ -1,0 +1,56 @@
+.new-note-form-container-background {
+    height: 80px;
+    position: absolute;
+    bottom: 0;
+    left: -10px;
+    right: 0;
+    z-index: 7; /* this is why a separate background element is needed, since the z-index would otherwise not be effective inside an &:before */
+
+    content: '';
+    position: absolute;
+    backdrop-filter: blur(5px);
+    mask: linear-gradient(transparent, black 30%);
+    -webkit-mask: linear-gradient(transparent, black 30%);
+}
+
+/* Not a child of .new-note-form-container-background to keep in line with .stream width */
+.new-note-form-container {
+    display: block;
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: #00000000;
+    z-index: 8;
+}
+
+.new-note-form {
+    display: flex;
+    margin: 10px;
+    width: auto;
+    box-shadow: 0 0 12px 5px rgb(234, 234, 234);
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+
+.new-note-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+}
+
+.add-note-button {
+    border: none;
+    outline: none;
+    background: #DDA601;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 15px;
+    font-weight: bold;
+    padding: 10px;
+}

@@ -6,6 +6,7 @@
     /* needed to prevent text overflowing but doesn't require a flex: 1 on the sidebar-stream_list-item-text */
     display: flex;
     flex-direction: row;
+    cursor: pointer;
 }
 
 .sidebar-stream_list-item:hover {
@@ -55,7 +56,7 @@
 
 .reserved-user_defined-separator {
     margin: 0 10px;
-    width: 90%;
-    height: 3px;
+    height: 2px;
+    border-radius: 1px;
     background-color: rgb(180, 180, 180);
 }

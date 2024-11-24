@@ -5,12 +5,13 @@ import { db } from '../firebase-config'
 import { useUser } from '../context/UserContext'
 import { useStream } from '../context/StreamContext'
 
+import '../styles/NoteComposer.css'
+
 const notesRef = collection(db, 'notes')
 
 export const NoteComposer = () => {
     const { user } = useUser()
-    const values = useStream()
-    const selectedStream = values?.selectedStream || null
+    const {selectedStream} = useStream()
 
     const [newNote, setNewNote] = useState("")
 
@@ -30,7 +31,8 @@ export const NoteComposer = () => {
     }
 
     return (
-        <div className='new-note-form-container-background'>
+        <>
+            <div className='new-note-form-container-background'></div>
             <div className='new-note-form-container'>
                 <form onSubmit={handleSubmit} className="new-note-form">
                     <input
@@ -50,6 +52,6 @@ export const NoteComposer = () => {
                     </button>
                 </form>
             </div>
-        </div>
+        </>
     )
 }

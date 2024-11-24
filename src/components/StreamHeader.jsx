@@ -5,6 +5,10 @@ import { useUser } from '../context/UserContext.js'
 import { useStream } from '../context/StreamContext.js'
 import { useView } from '../context/ViewContext.js'
 
+import { StreamIcon } from './StreamIcon.jsx'
+
+import '../styles/StreamHeader.css'
+
 export const StreamHeader = () => {
     const { user } = useUser()
     const { selectedStream, setShowStreamSettings } = useStream()
@@ -45,49 +49,64 @@ export const StreamHeader = () => {
     }
 
     return (
-        <div>
+        <>
+            <div className='header-background'></div>
             <div className="header">
-                <div className="stream-header-buttons-left buttons-container">
-                    <div className="button-container">
-                        <div
-                            className='button button-medium button-hover-dark'
-                            title="Toogle sidebar"
-                            onClick={toggleSidebar}
-                        >
-                            <span className="material-symbols-outlined">
-                                view_sidebar
-                            </span>
-                        </div>
-                    </div>
-                    <div className="button-container">
-                        <div
-                            className='button button-medium button-hover-dark'
-                            title="Add user to stream"
-                            onClick={() => setShowStreamSettings(true)}
-                        >
-                            <span className="material-symbols-outlined">
-                                settings
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="stream-name">{getStreamName(selectedStream.name)}</div>
-                <div className="stream-header-buttons-right buttons-container">
-                    <div className='button-container'>
-                        {buttonRight}
-                    </div>
-                    <div className='button-container'>
-                        <div className="button button-medium button-hover-dark" title="Delete all notes in the stream">
-                            <span
-                                className="material-symbols-outlined"
+                <div className="header-inner">
+
+                    <div className="stream-header-buttons-left buttons-container">
+                        <div className="button-container">
+                            <div
+                                className='button button-medium button-hover-dark'
+                                title="Toogle sidebar"
+                                onClick={toggleSidebar}
                             >
-                                clear_all
-                            </span>
+                                <span className="material-symbols-outlined">
+                                    view_sidebar
+                                </span>
+                            </div>
+                        </div>
+                        <div className="button-container">
+                            <div
+                                className='button button-medium button-hover-dark'
+                                title="Add user to stream"
+                                onClick={() => setShowStreamSettings(true)}
+                            >
+                                <span className="material-symbols-outlined">
+                                    settings
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='stream-header-name-icon-container'>
+                        <div className='stream-header-icon-container'>
+                            <StreamIcon
+                                reserved_stream={selectedStream.reserved}
+                                stream_name={selectedStream.name}
+                                stream_icon_uri={selectedStream?.icon_uri}
+                                group_stream={selectedStream.member_ids > 1}
+                            />
+                        </div>
+                        <div className='stream-header-name'>
+                            {getStreamName(selectedStream.name)}
+                        </div>
+                    </div>
+                    <div className="stream-header-buttons-right buttons-container">
+                        <div className='button-container'>
+                            {buttonRight}
+                        </div>
+                        <div className='button-container'>
+                            <div className="button button-medium button-hover-dark" title="Delete all notes in the stream">
+                                <span
+                                    className="material-symbols-outlined"
+                                >
+                                    clear_all
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <div className='header-background'></div> */}
-        </div>
+        </>
     )
 }
