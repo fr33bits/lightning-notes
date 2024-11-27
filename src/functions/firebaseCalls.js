@@ -9,6 +9,8 @@ const usersRef = collection(db, 'users')
 const streamsRef = collection(db, "streams")
 const notesRef = collection(db, "notes")
 
+// TODO: make sure all unsubscribe() functions are actually triggered!
+
 export const signInWithGoogle = async () => {
     try {
         const result = await signInWithPopup(auth, provider)

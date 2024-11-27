@@ -60,10 +60,7 @@ export const Note = ({note, author}) => {
                     }
                 >
                     {/* Style needed to push the note text to the right even though the parent div is already pushed to the right */}
-                    <div>
-
                     {note.text}
-                    </div>
                 </div>
                 {/* <div className='note-timestamp'>
                         {note?.created_at?.seconds ? getDate(note.created_at.seconds) : null}

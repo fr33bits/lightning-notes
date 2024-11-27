@@ -9,6 +9,7 @@ import { ViewProvider } from './context/ViewContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <React.StrictMode>
     <UserProvider>
       <ViewProvider>
         <StreamProvider>
@@ -16,4 +17,5 @@ root.render(
         </StreamProvider>
       </ViewProvider>
     </UserProvider>
+  </React.StrictMode>
 );
