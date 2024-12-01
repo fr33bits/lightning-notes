@@ -58,6 +58,7 @@ export const getUser = async (user_id) => {
     }
 }
 
+
 export const addUser = async (user) => {
     // user.preventDefault()
     try {
@@ -139,7 +140,8 @@ export const getStreamNotes = (stream_id, setNotes) => {
     const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
         let queriedNotes = []
         snapshot.forEach((doc) => {
-            queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
+            const noteAuthor =  getUser(doc.data().author_id)
+            queriedNotes.push({ ...doc.data(), id: doc.id, author: noteAuthor}) // if the id already existed, it would not be added
         })
         setNotes(queriedNotes)
     })

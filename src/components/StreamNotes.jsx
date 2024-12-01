@@ -40,8 +40,6 @@ export const StreamNotes = () => {
                     <Note
                         key={index}
                         note={note}
-                        index={index}
-                        author={getUser(note.author_id)}
                     />
                 ))}
                 <div ref={notesEndRef}></div>

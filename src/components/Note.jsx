@@ -1,41 +1,18 @@
-import { getDate } from '../functions/data'
+import { useState, useEffect } from 'react';
+import { firestoreTimestampToDate } from '../functions/data'
 import { getUser } from '../functions/firebaseCalls'
 
 import '../styles/Note.css'
 
-export const Note = ({note, author}) => {
-    const { format } = require('date-fns');
-
-    // USER DATA
-    // const [senders, setSenders] = useState([])
-    // useEffect(() => {
-    //     const fetchSenders = async () => {
-    //         const uniqueSenderIDs = []
-    //         for (let i = 0; i < notes.length; i++) {
-    //             const author_id = notes[i].author_id
-    //             if (!uniqueSenderIDs.includes(author_id)) {
-    //                 uniqueSenderIDs.push(author_id)
-    //             }
-    //         }
-
-    //         const usersRef = collection(db, 'users')
-    //         async function getUser(user_id) {
-    //             const q = query(usersRef, where("id", "==", user_id))
-    //             const querySnapshot = await getDocs(q);
-    //             const users = querySnapshot.docs.map(doc => doc.data());
-    //             return users[0]
-    //         }
-
-    //         const streamSenders = []
-    //         for (let i = 0; i < uniqueSenderIDs.length; i++) {
-    //             const data = await getUser(uniqueSenderIDs[i])
-    //             streamSenders[uniqueSenderIDs[i]] = data
-    //         }
-    //         setSenders(streamSenders)
-    //     }
-
-    //     fetchSenders()
-    // }, [notes])
+export const Note = ({note}) => {
+    const [author, setAuthor] = useState(null)
+    useEffect(() => {
+        // TODO: this is not a listener (could have a listener for all different authors for all notes)
+        async function fetchAuthor() {
+            setAuthor(await getUser(note.author_id))
+        }
+        fetchAuthor()
+    }, [])
 
     return (
         <div className='note-row'>
@@ -45,19 +22,17 @@ export const Note = ({note, author}) => {
             >
                 <div className='note-metadata-row'>
                     <div className='note-timestamp'>
-
+                        {firestoreTimestampToDate(note.created_at)}
                     </div>
-                    {/* <div
+                    <div
                         className='note-author-name'
                     >
-                        {getUser(note.author_id)}
-                    </div> */}
+                        {author?.name}
+                    </div>
                 </div>
                 <div
                     className='note-text'
-                    title={'Note ID: ' + note.id
-                        + '\n' + getDate(note.created_at)
-                    }
+                    title={'Note ID: ' + note.id}
                 >
                     {/* Style needed to push the note text to the right even though the parent div is already pushed to the right */}
                     {note.text}

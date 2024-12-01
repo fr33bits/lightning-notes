@@ -1,3 +1,5 @@
+const { format } = require('date-fns');
+
 export function getStreamName(streamName) {
     // The "stream" "All" is not really technically a stream per se; rather it is the aggregation of all other streams the user is a part of
     switch (streamName) {
@@ -16,10 +18,15 @@ export function getStreamName(streamName) {
     }
 }
 
-export function getDate(firestore_timestamp) {
+function firestoreTimestampToJSDate(firestore_timestamp) {
     const milliseconds = firestore_timestamp?.seconds * 1000 + firestore_timestamp?.nanoseconds / 1000000;
     const javascriptDate = new Date(milliseconds);
     return javascriptDate
+}
+
+export function firestoreTimestampToDate(firestore_timestamp) {
+    const JSDate = firestoreTimestampToJSDate(firestore_timestamp)
+    return format(JSDate, "dd MMMM yyyy HH:mm:ss")
 }
 
 export function separateStreams(streams) {
