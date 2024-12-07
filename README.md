@@ -1,5 +1,7 @@
 # Lightning Notes
 
+### _for when inspiration strikes_
+
 Lightning Notes is a quick note-taking app based on a chat-like user interface. But it goes beyond the "Note to Self" functionality found in many messaging apps as it also allows for the use of channels (streams) for organizing your notes and sharing them with others. You can also tag your notes or only share a web link.
 
 The app uses GitHub pages as its front-end while the data is stored in and synced between all devices you are signed into using a Firebase Firestore database.

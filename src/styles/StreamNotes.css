@@ -1,16 +1,33 @@
 .notes-container {
-    width: 100%;
-    flex: 1; /* TODO: why not height: 100? */
+    height: 100%; /* padding is included in this */
     overflow-y: scroll;
-    padding-top: 60px; /* adjustment for header */
-    padding-bottom: 60px; /* adjustment for floating note form */
+    padding-top: 50px; /* adjustment for header */
     /* TODO: doesn't seem like there's an easy way to fix the scrollbar being hidden behind the form; could use the perfect-scrollbar library */
 }
 
+.notes-container-composer-padding {
+    padding-bottom: 50px; /* adjustment for floating note form */
+}
+
 .notes {
+    padding: 10px 20px; /* this top and bottom padding exists regardless of notes-container padding, which is meant to make space for the StreamHeader and NoteComposer */
+}
+
+/* special notes-frame is used instead of the notes class in order to prevent the notesEndRef div from also producing an unnecessary gap*/
+.notes-frame {
+    /* styling below used to cause issues:
+    - when it interacted with the note-actions-container (which is placed relative to its parent) it caused extra spacing to be added to the bottom of the note-row, which created an uncontrollable gap between note-rows
+        - this is because the note-actions-container was placed in the middle of the border of the note-text element and the gap that is created is therefore about half the height of note-actions-container
+        - therefore it seems flex therefore acts as if note-actions-container is a regular block element positioned below the note-text element with the same height
+        - if the note-actions-container position was absolute, the gap would be eliminated but the note-actions-container would be placed at the bottom of the viewport
+        - the float: right property (which prevents the use of the 'display' property) also wasb't the issue as disabling it didn't fix this and only pushed the note-actions-container-container further down
+    - note-metadata is not the issue since disabling it didn't fix the problem
+    - note-actions-container-container is not the issue since disabling it didn't fix the problem
+    - eliminating this styling is possible but requires the use of more complex margin and padding properties
+        - positioning of the metadata elements (which use the float property) would also have to be fixed because anything less than 1/2 the height of the would cause the floating metadata elements to be displaced by text wrapping functionality; I don't know how to do that without using the float property and relative positioning (I'm not sure it's even possible)
+    - in the end the solution that solved everything maintained the use of this styling whilst moving the note-action-container into the note-bubble itself and using additional elements and styling tricks to reach the desired effect
+    */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    max-height: auto;
-    padding: 20px 20px 0px 20px;
+    gap: 5px;
 }

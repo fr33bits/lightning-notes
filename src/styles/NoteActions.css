@@ -1,0 +1,56 @@
+.note-actions {
+    display: block; /* could also be flex and there wouldn't be a need for note-action-container but with a simple block like this, spacing issues can be avoided */
+    height: 100%;
+}
+
+.note-action-container {
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
+}
+
+.note-action {
+    height: 100%;
+    width: 35px;
+    /* same as height of note-actions */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+    color: orange;
+}
+
+.note-action:hover {
+    background-color: rgb(255, 223, 163);
+}
+
+.favorite-highlight {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px orange, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange;
+}
+
+/* HIDING */
+/* Hide the note-actions-container when not hovering over the note-row*/
+.note-row .note-actions-container {
+    visibility: hidden;
+}
+.note-row:hover .note-actions-container {
+    visibility: unset;
+}
+
+/* Selectively show only the favorite button if the note is favorited */
+.note-row .show-anyway {
+    visibility: unset;
+}
+.note-row .show-anyway .note-action-container {
+    display: none;
+}
+.note-row .show-anyway .note-action-container.show-anyway {
+    display: inline-block;
+}
+.note-row:hover .show-anyway .note-action-container{
+    display: inline-block;
+}

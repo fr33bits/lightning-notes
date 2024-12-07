@@ -34,14 +34,20 @@ export const StreamNotes = () => {
     }, [notes]);
 
     return (
-        <div className='notes-container'>
-            <div className='notes'>
-                {notes.map((note, index) => (
-                    <Note
-                        key={index}
-                        note={note}
-                    />
-                ))}
+        <div
+            className={`notes-container
+                ${selectedStream.pseudo ? '' : 'notes-container-composer-padding'}
+            `}
+        >
+            <div className="notes">
+                <div className="notes-frame">
+                    {notes.map((note, index) => (
+                        <Note
+                            key={index}
+                            note={note}
+                        />
+                    ))}
+                </div>
                 <div ref={notesEndRef}></div>
             </div>
         </div>

@@ -1,38 +1,74 @@
 .note-row {
     width: 100%;
     max-width: 100%;
-    margin-bottom: 10px;
+    /* margin-top: 13px; (13px is the point at which the floating metadata elements are no longer displaced by text wrapping functionality) */
 }
 
-.note-metadata-row {
+.note-metadata {
+    z-index: 10;
+
     /* font-weight: bold; */
     font-size: small;
-    padding: 10px 15px;
+    padding: 5px 15px;
 }
 
-.note-timestamp, .note-author-name {
+.note-metadata-timestamp, .note-metadata-author-name {
     display: inline-block;
 }
 
-.note-author-name {
-    float:right;
+.note-metadata-author-name {
+    float: right;
 }
 
-.note-text {
-    margin: 3px 0;
-    padding: 10px;
+.note-container {
+    background-color: #78ff3f;
+}
+
+.note-bubble {
+    /* Implementation notes:
+    - padding-bottom should be kept zero to make sure the note-actions-container-container is on the bottom of the note-bubble
+    - if there's a desire to increase the spacing between the note-actions-container and the 'note':
+        - OPTION 1: the height of the note-actions-container-container should be increased and the note-actions-container relative positioning should be moved down by that amount
+        - OPTION 2 (better design): a spacer between the 'note' and note-actions-container-container should be added or adjusted (if it already exists)
+    */
+    padding: 10px 10px 0 10px;
 
     /* Wrapping for continous strings of text without spaces as easy line breaking points */
     word-break: break-all;
 
     border-radius: 15px;
 
-    background-color: #ffffff;
-
     /* Shadow */
     box-shadow: 0px 0px 12px 10px rgb(234, 234, 234);
+    background-color: white;
 }
 
-.note-timestamp {
+.note-metadata-timestamp {
     font-size:x-small
+}
+
+.note-bubble-spacer {
+    height: 3px;
+}
+
+.note-actions-container-container {
+    height: 17.5px; /* to make enough space even when NoteActions are hidden */
+    width: 100%;
+}
+
+.note-actions-container {
+    height: 35px;
+    
+    float: right;
+
+    /* redunant but added for clarity: */
+    position: relative;
+    top: 0px;
+    right: 0px; /* can be used to control how far from the right edge of the note-bubble the note-actions-container is */
+    
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+
+    /* Shadow */
+    box-shadow: 0px 0px 12px 5px rgb(234, 234, 234);
 }

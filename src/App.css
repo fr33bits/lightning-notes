@@ -17,12 +17,12 @@ body,
 
 /* TEXT-SELECTION PREVENTION */
 * {
-  -webkit-user-select: none;
-  /* Safari */
-  -ms-user-select: none;
-  /* IE 10 and IE 11 */
-  user-select: none;
   /* Standard syntax */
+  user-select: none;
+  /* Safari */
+  -webkit-user-select: none;
+  /* IE 10 and IE 11 */
+  -ms-user-select: none;
 }
 
 /* TOP-LEVEL VIEWS */
