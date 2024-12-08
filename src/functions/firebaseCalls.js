@@ -137,10 +137,11 @@ export const getUserStreams = (user_id, setStreamListLoading, setUserDefinedStre
     return () => unsubscribe()
 }
 
-export const getStreamNotes = (stream_id, setNotes) => {
+export const getStreamNotes = (stream_id, setNotes) => { // only returns notes not in trash
     const queryStreamNotes = query(
         notesRef,
         where("stream_id", "==", stream_id),
+        where("trash", "==", false),
         orderBy('created_at')
     )
     const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
@@ -155,10 +156,11 @@ export const getStreamNotes = (stream_id, setNotes) => {
     return () => unsubscribe()
 }
 
-export const getAllUserNotes = (user_id, setNotes) => {
+export const getAllUserNotes = (user_id, setNotes) => { // only returns notes not in trash
     const queryStreamNotes = query(
         notesRef,
         where("author_id", "==", user_id),
+        where("trash", "==", false),
         orderBy('created_at')
     )
     const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
@@ -173,11 +175,11 @@ export const getAllUserNotes = (user_id, setNotes) => {
     return () => unsubscribe()
 }
 
-export const getAllUserDeletedNotes = (user_id, setNotes) => {
+export const getAllUserTrashNotes = (user_id, setNotes) => {
     const queryStreamNotes = query(
         notesRef,
         where("author_id", "==", user_id),
-        where("deleted", "==", true),
+        where("trash", "==", true),
         orderBy('created_at')
     )
     const unsubscribe = onSnapshot(queryStreamNotes, (snapshot) => {
@@ -195,6 +197,7 @@ export const lastNoteInStream = async (stream_id, setLastNote) => {
     const queryNoteList = query(
         notesRef,
         where("stream_id", "==", stream_id),
+        where("trash", "==", false),
         orderBy('created_at', "desc"),
         limit(1)
     )
@@ -233,14 +236,71 @@ export const leaveStream = async (stream, user_id) => {
 
 // NOTES
 
+export const createNote = async (note_text, user_id, stream_id) => {
+    if (note_text === "") {
+        return
+    } else {
+        try {
+            await addDoc(notesRef, {
+                text: note_text,
+                created_at: serverTimestamp(),
+                author_id: user_id,
+                stream_id: stream_id,
+                favorite: false,
+                trash: false,
+                hidden: false
+            })
+            return true
+        } catch (error) {
+            console.error("Error creating note: ", error)
+            return false
+        }
+    }
+}
+
+export const markNoteAsInTrash = (note_id) => {
+    const docRef = doc(db, "notes", note_id)
+    const confirmation = window.confirm(`Are you sure you want to move this note to trash?`)
+    if (confirmation) {
+        try {
+            updateDoc(docRef, {
+                trash: true
+            })
+        } catch (error) {
+            console.error("Error marking this as in the trash: ", error)
+        }
+    }
+}
+
+// this would be harder to make true with pseudostreams that may require their own functions
+// export const markAllNotesInStreamAsInTrash = (user_id, stream_id) => {
+//     const docRef = doc(db, "streams", stream_id)
+//     const queryStreamNotes = query(
+//         notesRef,
+//         where("author_id", "==", user_id),
+//         where("stream_id", "==", stream_id),
+//     )
+
+//     const confirmation = window.confirm(`Are you sure you want to move all notes from this stream that you authored to trash?`)
+//     if (confirmation) {
+//         try {
+//             updateDoc(docRef, {
+//                 trash: true
+//             })
+//         } catch (error) {
+//             console.error("Error marking this as in the trash: ", error)
+//         }
+//     }
+// }
+
 export const deleteNote = (note_id) => {
     const docRef = doc(db, "notes", note_id)
-    const confirmation = window.confirm(`Are you sure you want to delete this note?`)
+    const confirmation = window.confirm(`Are you sure you want to PERMANENTLY delete this note?`)
     if (confirmation) {
         try {
             deleteDoc(docRef)
         } catch (error) {
-            console.error("Error toggling note favorite: ", error)
+            console.error("Error permanently deleting note: ", error)
         }
     }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { getStreamNotes, getAllUserNotes, getAllUserDeletedNotes } from '../functions/firebaseCalls.js'
+import { getStreamNotes, getAllUserNotes, getAllUserTrashNotes } from '../functions/firebaseCalls.js'
 
 import { Note } from './Note.jsx'
 
@@ -20,7 +20,7 @@ export const StreamNotes = () => {
         if (selectedStream.pseudo && selectedStream.name === "_all") {
             unsubscribeFunction = getAllUserNotes(user.id, setNotes)
         } else if (selectedStream.pseudo && selectedStream.name === "_trash") {
-            unsubscribeFunction = getAllUserDeletedNotes(user.id, setNotes)
+            unsubscribeFunction = getAllUserTrashNotes(user.id, setNotes)
         } else {
             unsubscribeFunction = getStreamNotes(selectedStream.id, setNotes)
         }

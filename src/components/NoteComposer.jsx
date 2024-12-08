@@ -1,32 +1,23 @@
 import { useState } from 'react'
-import { addDoc, serverTimestamp, collection } from 'firebase/firestore'
-import { db } from '../firebase-config'
 
 import { useUser } from '../context/UserContext'
 import { useStream } from '../context/StreamContext'
 
-import '../styles/NoteComposer.css'
+import { createNote } from '../functions/firebaseCalls'
 
-const notesRef = collection(db, 'notes')
+import '../styles/NoteComposer.css'
 
 export const NoteComposer = () => {
     const { user } = useUser()
     const {selectedStream} = useStream()
 
-    const [newNote, setNewNote] = useState("")
+    const [noteText, setNoteText] = useState("")
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        if (newNote === "") {
-            return
-        } else {
-            await addDoc(notesRef, {
-                text: newNote,
-                created_at: serverTimestamp(),
-                author_id: user.id,
-                stream_id: selectedStream.id
-            })
-            setNewNote("")
+        const result = await createNote(noteText, user.id, selectedStream.id)
+        if (result) {
+            setNoteText("")
         }
     }
 
@@ -36,8 +27,8 @@ export const NoteComposer = () => {
             <div className='new-note-form-container'>
                 <form onSubmit={handleSubmit} className="new-note-form">
                     <input
-                        onChange={(e) => setNewNote(e.target.value)}
-                        value={newNote}
+                        onChange={(e) => setNoteText(e.target.value)}
+                        value={noteText}
                         className="new-note-input"
                         placeholder="Type a note..."
                     />

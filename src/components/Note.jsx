@@ -8,13 +8,24 @@ import '../styles/Note.css'
 
 export const Note = ({ note }) => {
     const [author, setAuthor] = useState(null)
+    const [date, setDate] = useState(null)
+
     useEffect(() => {
         // TODO: this is not a listener (could have a listener for all different authors for all notes)
         async function fetchAuthor() {
             setAuthor(await getUser(note.author_id))
         }
         fetchAuthor()
-    }, [])
+    }, [note])
+
+    useEffect(() => { // must be done this way as created_at is set by Firestore and is not immediately availible
+        if (note.created_at === null) {
+            setDate("Timestamp not yet availible")
+        } else {
+            const date = firestoreTimestampToDate(note.created_at)
+            setDate(date)
+        }
+    }, [note.created_at])
 
     return (
         <div
@@ -25,7 +36,7 @@ export const Note = ({ note }) => {
             {/* could also relatively easily be added below the note-bubble */}
             <div className='note-metadata'>
                 <div className='note-metadata-timestamp'>
-                    {firestoreTimestampToDate(note.created_at)}
+                    {date}
                 </div>
                 <div
                     className='note-metadata-author-name'
