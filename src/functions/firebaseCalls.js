@@ -11,6 +11,8 @@ const notesRef = collection(db, "notes")
 
 // TODO: make sure all unsubscribe() functions are actually triggered!
 
+// AUTHENTICATION
+
 export const signInWithGoogle = async () => {
     try {
         const result = await signInWithPopup(auth, provider)
@@ -24,6 +26,8 @@ export const signInWithGoogle = async () => {
         console.error(err);
     }
 }
+
+// USERS
 
 export const getUserByAuthID = async (auth_id) => {
     try {
@@ -82,6 +86,8 @@ export const addUser = async (user) => {
         console.error(err)
     }
 }
+
+// STREAMS
 
 export const createReservedStreams = async (user) => {
     createReservedStream(user, "_unsorted")
@@ -222,5 +228,18 @@ export const leaveStream = async (stream, user_id) => {
         } catch (error) {
             console.error("Error leaving stream: ", error)
         }
+    }
+}
+
+// NOTES
+
+export const setNoteFavorite = (note_id, setting) => {
+    const docRef = doc(db, "notes", note_id)
+    try {
+        updateDoc(docRef, {
+            favorite: setting
+        })
+    } catch (error) {
+        console.error("Error toggling note favorite: ", error)
     }
 }

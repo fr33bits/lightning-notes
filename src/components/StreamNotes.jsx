@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { getStreamNotes, getUser, getAllUserNotes, getAllUserDeletedNotes } from '../functions/firebaseCalls.js'
+import { getStreamNotes, getAllUserNotes, getAllUserDeletedNotes } from '../functions/firebaseCalls.js'
 
 import { Note } from './Note.jsx'
 
