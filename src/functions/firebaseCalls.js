@@ -1,5 +1,5 @@
 import { signInWithPopup } from 'firebase/auth'
-import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc, arrayRemove, updateDoc, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { collection, where, query, doc, getDoc, getDocs, serverTimestamp, addDoc, arrayRemove, updateDoc, orderBy, limit, onSnapshot, deleteDoc } from "firebase/firestore";
 
 import { auth, provider, db } from '../firebase-config.js'
 
@@ -232,6 +232,18 @@ export const leaveStream = async (stream, user_id) => {
 }
 
 // NOTES
+
+export const deleteNote = (note_id) => {
+    const docRef = doc(db, "notes", note_id)
+    const confirmation = window.confirm(`Are you sure you want to delete this note?`)
+    if (confirmation) {
+        try {
+            deleteDoc(docRef)
+        } catch (error) {
+            console.error("Error toggling note favorite: ", error)
+        }
+    }
+}
 
 export const setNoteFavorite = (note_id, setting) => {
     const docRef = doc(db, "notes", note_id)

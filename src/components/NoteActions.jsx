@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { setNoteFavorite } from '../functions/firebaseCalls.js'
+import { deleteNote, setNoteFavorite } from '../functions/firebaseCalls.js'
 
 import '../styles/NoteActions.css'
 
@@ -9,7 +9,7 @@ export const NoteActions = ({ note }) => {
 
     return (
         <div className="note-actions">
-            <div className='note-action-container'>
+            <div className='note-action-container' onClick={() => deleteNote(note.id)}>
                 <div className="note-action note-action-favorite">
                     <span
                         className="material-symbols-outlined">
