@@ -32,6 +32,7 @@ export const NoteActions = ({ note }) => {
                 <div
                     className={`note-action-container show-anyway`}
                     onClick={() => changePriority(0)}
+                    title="Remove priority"
                 >
                     <div className="note-action">
                         <span
@@ -48,6 +49,7 @@ export const NoteActions = ({ note }) => {
                 <div
                     className={`note-action-container show-anyway`}
                     onClick={() => changePriority(1)}
+                    title={`${getPriorityLevelName(1, true)} priority`}
                 >
                     <div className="note-action">
                         <span
@@ -64,6 +66,7 @@ export const NoteActions = ({ note }) => {
                 <div
                     className={`note-action-container show-anyway`}
                     onClick={() => changePriority(2)}
+                    title={`${getPriorityLevelName(2, true)} priority`}
                 >
                     <div className="note-action">
                         <span
@@ -80,6 +83,7 @@ export const NoteActions = ({ note }) => {
                 <div
                     className={`note-action-container show-anyway`}
                     onClick={() => changePriority(3)}
+                    title={`${getPriorityLevelName(3, true)} priority`}
                 >
                     <div className="note-action">
                         <span
@@ -105,7 +109,11 @@ export const NoteActions = ({ note }) => {
         view = (
             <>
                 {/* DELETE */}
-                <div className='note-action-container' onClick={trashDeleteAction}>
+                <div
+                    className='note-action-container'
+                    onClick={trashDeleteAction}
+                    title={note.trash ? 'Permanently delete note' : 'Move note to trash'}
+                >
                     <div className="note-action">
                         <span
                             className="material-symbols-outlined">
@@ -118,16 +126,16 @@ export const NoteActions = ({ note }) => {
                 <div
                     className={`note-action-container ${note.priority ? 'show-anyway' : ''}`}
                     onClick={() => setPriorityEditingMode(true)}
+                    title={note.priority ? `${getPriorityLevelName(note.priority, true)} priority` : 'Set priority'}
                 >
                     <div className="note-action">
                         <span
                             className={
                                 `material-symbols-outlined
                                 priority-${getPriorityLevelName(note.priority, false)}
-                                ${
-                                    note.priority
-                                        ? `priority-${getPriorityLevelName(note.priority, false)}-highlight`
-                                        : ''
+                                ${note.priority
+                                    ? `priority-${getPriorityLevelName(note.priority, false)}-highlight`
+                                    : ''
                                 }
                                 ${note.priority ? 'icon-filled' : ''}`
                             }
@@ -141,6 +149,7 @@ export const NoteActions = ({ note }) => {
                 <div
                     className={`note-action-container ${note.favorite ? 'show-anyway' : ''}`}
                     onClick={() => setNoteFavorite(note.id, !note.favorite)}
+                    title={note.favorite ? 'Unfavorite' : 'Favorite'}
                 >
                     <div className="note-action">
                         <span

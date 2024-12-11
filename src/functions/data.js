@@ -37,7 +37,7 @@ export function getPriorityLevelName(priority_level, capizalization) {
             priority_level_name = "UNDEFINED_PRIORITY_LEVEL"
     }
     if (capizalization) {
-        return priority_level_name.toUpperCase()
+        return priority_level_name.charAt(0).toUpperCase() + priority_level_name.slice(1)
     } else {
         return priority_level_name
     }
