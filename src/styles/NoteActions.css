@@ -28,8 +28,58 @@
     background-color: rgb(255, 223, 163);
 }
 
+/* FAVORITE */
 .favorite-highlight {
     text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px orange, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange;
+}
+
+/* PRIORITY */
+.priority-none {
+    color: grey;
+}
+.priority-none-highlight {
+    text-shadow:
+        0 0 10px grey,
+        0 0 20px grey,
+        0 0 25px grey,
+        0 0 30px grey,
+        0 0 40px grey;
+}
+
+.priority-low {
+    color: #195ddc;
+}
+.priority-low-highlight {
+    text-shadow:
+        0 0 10px #195ddc,
+        0 0 20px #195ddc,
+        0 0 25px #195ddc,
+        0 0 30px #195ddc,
+        0 0 40px #195ddc;
+}
+
+.priority-medium {
+    color: #ffc710;
+}
+.priority-medium-highlight {
+    text-shadow:
+    0 0 10px #ffd000,
+    0 0 20px #ffd000,
+    0 0 25px #ffd000,
+    0 0 30px #ffd000,
+    0 0 40px #ffd000;
+}
+
+.priority-high {
+    color: red;
+}
+.priority-high-highlight {
+    text-shadow:
+    0 0 10px red,
+    0 0 20px red,
+    0 0 25px red,
+    0 0 30px red,
+    0 0 40px red;
 }
 
 /* HIDING */

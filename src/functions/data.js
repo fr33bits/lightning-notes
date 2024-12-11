@@ -18,6 +18,31 @@ export function getStreamName(streamName) {
     }
 }
 
+export function getPriorityLevelName(priority_level, capizalization) {
+    let priority_level_name;
+    switch (priority_level) {
+        case 0:
+            priority_level_name = "none"
+            break
+        case 1:
+            priority_level_name = "low"
+            break
+        case 2:
+            priority_level_name = "medium"
+            break
+        case 3:
+            priority_level_name = "high"
+            break
+        default:
+            priority_level_name = "UNDEFINED_PRIORITY_LEVEL"
+    }
+    if (capizalization) {
+        return priority_level_name.toUpperCase()
+    } else {
+        return priority_level_name
+    }
+}
+
 function firestoreTimestampToJSDate(firestore_timestamp) {
     const milliseconds = firestore_timestamp?.seconds * 1000 + firestore_timestamp?.nanoseconds / 1000000;
     const javascriptDate = new Date(milliseconds);

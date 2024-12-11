@@ -168,7 +168,6 @@ export const getAllUserNotes = (user_id, setNotes) => { // only returns notes no
         snapshot.forEach((doc) => {
             queriedNotes.push({ ...doc.data(), id: doc.id }) // if the id already existed, it would not be added
         })
-        console.log(queriedNotes)
         setNotes(queriedNotes)
     })
 
@@ -246,6 +245,7 @@ export const createNote = async (note_text, user_id, stream_id) => {
                 created_at: serverTimestamp(),
                 author_id: user_id,
                 stream_id: stream_id,
+                priority: 0,
                 favorite: false,
                 trash: false,
                 hidden: false
@@ -313,5 +313,16 @@ export const setNoteFavorite = (note_id, setting) => {
         })
     } catch (error) {
         console.error("Error toggling note favorite: ", error)
+    }
+}
+
+export const setNotePriority = (note_id, priority) => {
+    const docRef = doc(db, "notes", note_id)
+    try {
+        updateDoc(docRef, {
+            priority: priority
+        })
+    } catch (error) {
+        console.error("Error changing note priority: ", error)
     }
 }

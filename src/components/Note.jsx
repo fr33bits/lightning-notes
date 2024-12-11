@@ -58,7 +58,7 @@ export const Note = ({ note }) => {
                 <div className="note-actions-container-container">
                     <div
                         className={`note-actions-container
-                            ${note.favorite ? 'show-anyway' : ''}
+                            ${note.favorite || note.priority ? 'show-anyway' : ''}
                         `}
                     >
                         <NoteActions note={note} />
