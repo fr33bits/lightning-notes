@@ -5,7 +5,7 @@ import { markNoteAsInTrash, deleteNote, setNoteFavorite, setNotePriority } from 
 
 import '../styles/NoteActions.css'
 
-export const NoteActions = ({ note }) => {
+export const NoteActions = ({ note, noteTextCopied, setNoteTextCopied }) => {
     const [textEditingMode, setTextEditingMode] = useState(false)
     const [priorityEditingMode, setPriorityEditingMode] = useState(false)
 
@@ -21,6 +21,18 @@ export const NoteActions = ({ note }) => {
         setPriorityEditingMode(false)
         if (priority !== note.priority) {
             setNotePriority(note.id, priority)
+        }
+    }
+
+    const copyNoteTextAction = () => {
+        try {
+            navigator.clipboard.writeText(note.text)
+            setNoteTextCopied(true)
+            setTimeout(() => {
+                setNoteTextCopied(false)
+            }, 1000)
+        } catch (error) {
+            console.error('Failed to copy note text: ', error)
         }
     }
 
@@ -102,8 +114,15 @@ export const NoteActions = ({ note }) => {
     } else if (textEditingMode) {
         view = (
             <>
-
             </>
+        )
+    } else if (noteTextCopied) {
+        view = (
+            <div className='note-action-container show-anyway' title="Note text copied!">
+                <div className='note-text-copied'>
+                    Copied!
+                </div>
+            </div>
         )
     } else { // not in any editing mode
         view = (
@@ -118,6 +137,20 @@ export const NoteActions = ({ note }) => {
                         <span
                             className="material-symbols-outlined">
                             delete
+                        </span>
+                    </div>
+                </div>
+
+                {/* COPY NOTE TEXT */}
+                <div
+                    className='note-action-container'
+                    onClick={copyNoteTextAction}
+                    title="Copy note text"
+                >
+                    <div className="note-action">
+                        <span
+                            className="material-symbols-outlined">
+                            content_copy
                         </span>
                     </div>
                 </div>

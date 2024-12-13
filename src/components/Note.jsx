@@ -10,6 +10,8 @@ export const Note = ({ note }) => {
     const [author, setAuthor] = useState(null)
     const [date, setDate] = useState(null)
 
+    const [noteTextCopied, setNoteTextCopied] = useState(false)
+
     useEffect(() => {
         // TODO: this is not a listener (could have a listener for all different authors for all notes)
         async function fetchAuthor() {
@@ -58,10 +60,14 @@ export const Note = ({ note }) => {
                 <div className="note-actions-container-container">
                     <div
                         className={`note-actions-container
-                            ${note.favorite || note.priority ? 'show-anyway' : ''}
+                            ${note.favorite || note.priority || noteTextCopied ? 'show-anyway' : ''}
                         `}
                     >
-                        <NoteActions note={note} />
+                        <NoteActions
+                            note={note}
+                            noteTextCopied={noteTextCopied}
+                            setNoteTextCopied={setNoteTextCopied}
+                        />
                     </div>
                 </div>
             </div>
